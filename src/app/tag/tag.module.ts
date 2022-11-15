@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { TagRoutingModule } from './tag-routing.module';
 import { TagsService } from './services/tags.service';
+import { TagsResolver } from './resolvers/tags.resolver';
 
 
 @NgModule({
@@ -12,7 +13,8 @@ import { TagsService } from './services/tags.service';
     TagRoutingModule
   ],
   providers:[
-    TagsService
+    TagsService,
+    TagsResolver
   ]
 })
 export class TagModule { }

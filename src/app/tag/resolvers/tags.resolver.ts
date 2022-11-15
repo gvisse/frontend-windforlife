@@ -5,7 +5,7 @@ import { TagsService } from '../services/tags.service';
 import { Observable } from 'rxjs';
 
 @Injectable()
-export class PostsResolver implements Resolve<Tag[]> {
+export class TagsResolver implements Resolve<Tag[]> {
   constructor(private tagsService: TagsService) {}
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Tag[]> {

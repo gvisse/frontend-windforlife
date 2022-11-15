@@ -17,6 +17,10 @@ import { TagListItemComponent } from './components/tag-list-item/tag-list-item.c
     CommonModule,
     TagRoutingModule
   ],
+  exports : [
+    TagListComponent,
+    TagListItemComponent
+  ],
   providers:[
     TagsService,
     TagsResolver

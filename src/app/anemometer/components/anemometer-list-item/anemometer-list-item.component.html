@@ -1,0 +1,34 @@
+<mat-card>
+    <mat-card-header>
+      <mat-card-title>
+        <span>{{ anemometer.name | titlecase }}</span>
+      </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+        <div class="anemometer-coordinates">
+            <dl>
+                <dt>Lat :</dt>
+                <dd>{{ anemometer.latitude }}</dd>
+                <dt>Long :</dt>
+                <dd>{{ anemometer.longitude }}</dd>
+                <dt>Alt :</dt>
+                <dd>{{ anemometer.altitude }}</dd>
+            </dl>
+        </div>
+        <div class="anemometer-meanspeed" *ngIf="anemometer.mean_speed_today || anemometer.mean_speed_week">
+            <p *ngIf="anemometer.mean_speed_today">Mean speed today : {{ anemometer.mean_speed_today }} kn</p>
+            <p *ngIf="anemometer.mean_speed_week">Mean speed this week : {{ anemometer.mean_speed_week }} kn</p>
+        </div>
+    </mat-card-content>
+    <mat-card-footer>
+        <div class="anemometer-tags">
+            <ul>
+                <ng-container *ngFor="let tag of anemometer.tags">
+                    <li>
+                        <app-tag-list-item [tag]="tag"></app-tag-list-item>
+                    </li>
+                </ng-container>
+            </ul>
+        </div>
+    </mat-card-footer>
+  </mat-card>

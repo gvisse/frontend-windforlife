@@ -1,11 +1,9 @@
-<mat-card>
-    <mat-card-content>
-        <p>Speed : {{ wind.speed }} kn</p>
-        <p>At : {{ wind.time }}</p>
-    </mat-card-content>
-    <mat-card-footer>
-        <div class="wind-anemometer">
-            <p>Anemometer : {{ wind.anemometer }}</p>
-        </div>
-    </mat-card-footer>
-</mat-card>
+<section class="wind d-flex">
+    <div class="wind-speed-at d-flex flex-item-center flex-justify-between col-6">
+        <span>Speed : {{ wind.speed }} kn</span>
+        <span>At : {{ wind.time }}</span>
+    </div>
+    <div class="wind-anemometer d-flex flex-item-center flex-justify-end col-6">
+        <a mat-flat-button color="accent" routerLink="/anemometer">Anemometer : {{ wind.anemometer }}</a>
+    </div>
+</section>

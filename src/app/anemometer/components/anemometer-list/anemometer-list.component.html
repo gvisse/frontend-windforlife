@@ -1,2 +1,12 @@
-<h2>Anemometers</h2>
-<app-anemometer-list-item *ngFor="let anemometer of anemometers$ | async" [anemometer]="anemometer"></app-anemometer-list-item>
+<div class="anemometers box-shadow">
+    <div class="anemometers-title">
+        <h2>Anemometers</h2>
+    </div>
+    <ul class="cards-container">
+        <ng-container *ngFor="let anemometer of anemometers$ | async">
+            <li class="card">
+                <app-anemometer-list-item [anemometer]="anemometer"></app-anemometer-list-item>
+            </li>
+        </ng-container>
+    </ul>
+</div>

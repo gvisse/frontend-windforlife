@@ -1,0 +1,20 @@
+.anemometer-coordinates, .anemometer-tags{
+    padding-left: 0;
+}
+.anemometer-coordinates li, .anemometer-tags li{
+    list-style-type: none;
+    display: inline-block;
+    margin-left: 10px;
+}
+
+.anemometer-coordinates li:first-of-type, .anemometer-tags li:first-of-type{
+    margin-left: 0;
+}
+
+.anemometer-tags{
+    padding : 5px;
+}
+
+.anemometer-meanspeeds{
+    margin-top: 10px;
+}

@@ -1,1 +1,2 @@
-<p>tag-list works!</p>
+<h2>Tags</h2>
+<app-tag-list-item *ngFor="let tag of tags$ | async" [tag]="tag"></app-tag-list-item>

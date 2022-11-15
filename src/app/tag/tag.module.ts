@@ -4,10 +4,15 @@ import { CommonModule } from '@angular/common';
 import { TagRoutingModule } from './tag-routing.module';
 import { TagsService } from './services/tags.service';
 import { TagsResolver } from './resolvers/tags.resolver';
+import { TagListComponent } from './components/tag-list/tag-list.component';
 
 
 @NgModule({
-  declarations: [],
+  declarations: [
+    
+  
+    TagListComponent
+  ],
   imports: [
     CommonModule,
     TagRoutingModule

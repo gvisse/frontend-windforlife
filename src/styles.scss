@@ -2,10 +2,6 @@ html, body { height: 100%; }
 body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
-  background-image: url('./assets/images/blurred-bg.jpg');
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-attachment: fixed;
 }
 
 a {
@@ -15,4 +11,24 @@ a {
     &:hover {
       text-decoration: underline;
     }
+}
+
+.d-flex{
+  display: flex !important;
+}
+
+.flex-item-center{
+  align-items: center !important;
+}
+
+.flex-auto{
+  flex: auto !important;
+}
+
+.flex-justify-end{
+  justify-content: flex-end !important;
+}
+
+.col-6{
+  width: 49.99999998%;
 }

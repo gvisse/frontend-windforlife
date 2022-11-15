@@ -1,3 +1,39 @@
-h2 {
-    color: white;
+.box{
+    background-color: #ffffff;
+    border-color: #d0d7de;
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 6px;
 }
+
+.box-header{
+    background-color: #f6f8fa;
+    border-color: #d0d7de;
+    border-style: solid;
+    border-width: 1px;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+    margin: -1px -1px 0;
+    padding: 8px 16px;
+}
+
+.box-title{
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.box-container{
+    margin: 0 auto;
+    padding-left: 0;
+}
+
+.box-row{
+    list-style-type: none;
+    padding: 8px 16px;
+    border-top : 1px solid hsla(210,18%,87%,1);
+}
+
+.box-row:first-of-type{
+    border-top-color: transparent;
+}
+

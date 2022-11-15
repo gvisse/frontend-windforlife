@@ -1,2 +1,12 @@
-<h2>Tags</h2>
-<app-tag-list-item *ngFor="let tag of tags$ | async" [tag]="tag"></app-tag-list-item>
+<div class="box">
+    <div class="box-header">
+        <span class="box-title">Tags</span>
+    </div>
+    <ul class="box-container">
+        <ng-container *ngFor="let tag of tags$ | async">
+            <li class="box-row">
+                <app-tag-list-item [tag]="tag" class="d-flex flex-item-center"></app-tag-list-item>
+            </li>
+        </ng-container>
+    </ul>
+</div>

@@ -10,6 +10,6 @@ export class TagsService {
   constructor(private http: HttpClient) {}
 
   getTags(): Observable<Tag[]> {
-    return this.http.get<Tag[]>(`${environment.apiUrl}/tag`);
+    return this.http.get<Tag[]>(`${environment.apiUrl}/tag/`);
   }
 }

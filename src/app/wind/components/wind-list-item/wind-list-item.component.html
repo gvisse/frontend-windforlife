@@ -1,7 +1,7 @@
 <section class="wind d-flex">
     <div class="wind-speed-at d-flex flex-item-center flex-justify-between col-6">
         <span>Speed : {{ wind.speed }} kn</span>
-        <span>At : {{ wind.time }}</span>
+        <span>At : {{ wind.time | date: 'dd/MM/yy, à HH:mm' }}</span>
     </div>
     <div class="wind-anemometer d-flex flex-item-center flex-justify-end col-6">
         <a mat-flat-button color="accent" routerLink="/anemometer">Anemometer : {{ wind.anemometer }}</a>

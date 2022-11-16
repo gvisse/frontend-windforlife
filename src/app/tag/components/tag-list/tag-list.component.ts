@@ -16,7 +16,7 @@ export class TagListComponent implements OnInit {
 
   ngOnInit(): void {
     this.tags$ = this.route.data.pipe(
-      map(data => data['posts']['results'])
+      map(data => data['tags']['results'])
     );
   }
 

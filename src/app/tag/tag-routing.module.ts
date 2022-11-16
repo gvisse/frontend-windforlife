@@ -4,7 +4,7 @@ import { TagListComponent } from './components/tag-list/tag-list.component';
 import { TagsResolver } from './resolvers/tags.resolver';
 
 const routes: Routes = [
-  { path: '', component: TagListComponent, resolve: { posts: TagsResolver } }
+  { path: '', component: TagListComponent, resolve: { tags: TagsResolver } }
 ];
 @NgModule({
   imports: [RouterModule.forChild(routes)],

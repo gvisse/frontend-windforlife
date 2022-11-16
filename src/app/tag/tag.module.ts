@@ -6,6 +6,7 @@ import { TagsService } from './services/tags.service';
 import { TagsResolver } from './resolvers/tags.resolver';
 import { TagListComponent } from './components/tag-list/tag-list.component';
 import { TagListItemComponent } from './components/tag-list-item/tag-list-item.component';
+import { SharedModule } from '../shared/shared.module';
 
 
 @NgModule({
@@ -15,6 +16,7 @@ import { TagListItemComponent } from './components/tag-list-item/tag-list-item.c
   ],
   imports: [
     CommonModule,
+    SharedModule,
     TagRoutingModule
   ],
   exports : [

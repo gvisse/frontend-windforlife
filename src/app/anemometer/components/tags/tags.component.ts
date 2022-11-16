@@ -1,5 +1,4 @@
-import { Component, Input, EventEmitter, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormControl, Validators } from '@angular/forms';
+import { Component, Input, OnInit } from '@angular/core';
 import { Tag } from 'src/app/tag/models/tag.model';
 
 @Component({
@@ -10,22 +9,9 @@ import { Tag } from 'src/app/tag/models/tag.model';
 export class TagsComponent implements OnInit {
 
   @Input() tags?: Tag[];
-  @Output() newTag = new EventEmitter<string>();
-  @Input() canAdd!: boolean;
-
-  tagCtrl!: FormControl;
-
-  constructor(private fb: FormBuilder) { }
+  constructor() { }
 
   ngOnInit(): void {
-    this.tagCtrl = this.fb.control('', [Validators.required, Validators.minLength(3)]);
   }
 
-  onAddTag(){
-    if(this.tagCtrl.invalid){
-      return;
-    }
-    this.newTag.emit(this.tagCtrl.value);
-    this.tagCtrl.reset();
-  }
 }

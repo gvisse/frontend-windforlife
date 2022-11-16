@@ -1,0 +1,23 @@
+.anemometer-tags{
+    padding : 5px;
+}
+.anemometer-tags li{
+    list-style-type: none;
+    display: inline-block;
+    margin-left: 10px;
+}
+
+.anemometer-tags li:first-of-type{
+    margin-left: 0;
+}
+
+.tags-row {
+    display: flex;
+    padding-top: 10px;
+    justify-content: center;
+    align-items: center;
+}
+  
+mat-form-field {
+    width: 50%;
+}

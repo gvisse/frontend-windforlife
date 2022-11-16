@@ -16,7 +16,7 @@ export class AnemometerListComponent implements OnInit {
 
   ngOnInit(): void {
     this.anemometers$ = this.route.data.pipe(
-      map(data => data['posts']['results'])
+      map(data => data['anemometers']['results'])
     )
   }
 

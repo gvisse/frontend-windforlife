@@ -1,0 +1,16 @@
+<!-- <div *ngIf="canAdd" class="tags-row">
+    <mat-form-field>
+      <input type="text" matInput placeholder="Ajoutez un tag" [formControl]="tagCtrl">
+    </mat-form-field>
+    <button mat-icon-button color="primary" (click)="onAddTag()">
+      <mat-icon>add-circle</mat-icon>
+    </button>
+</div> -->
+
+<ul class="anemometer-tags d-flex flex-item-center flex-justify-end flex-wrap">
+    <ng-container *ngFor="let tag of tags">
+        <li>
+            <a class="tag-name">{{tag.name}}</a>
+        </li>
+    </ng-container>
+</ul>

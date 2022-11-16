@@ -1,7 +1,8 @@
-<mat-card>
+<mat-card (click)="onViewAnemometer()">
     <mat-card-header>
       <mat-card-title>
         <span>{{ anemometer.name | titlecase }}</span>
+        <a routerLink="/anemometer">Back</a>
       </mat-card-title>
     </mat-card-header>
     <mat-card-content>
@@ -10,21 +11,8 @@
             <li>Long : {{ anemometer.longitude }}</li>
             <li>Alt : {{ anemometer.altitude }} m</li>
         </ul>
-        <section class="anemometer-meanspeeds" *ngIf="anemometer.mean_speed_today || anemometer.mean_speed_week">
-            <span>Mean speeds</span>
-            <ul>
-                <li *ngIf="anemometer.mean_speed_today">Today : {{ anemometer.mean_speed_today }} kn</li>
-                <li *ngIf="anemometer.mean_speed_week">This week : {{ anemometer.mean_speed_week }} kn</li>
-            </ul>
-        </section>
     </mat-card-content>
     <mat-card-footer>
-        <ul class="anemometer-tags d-flex flex-item-center flex-justify-end flex-wrap">
-            <ng-container *ngFor="let tag of anemometer.tags">
-                <li>
-                    <a class="tag-name">{{tag.name}}</a>
-                </li>
-            </ng-container>
-        </ul>
+        <app-tags [tags]="anemometer.tags"></app-tags>
     </mat-card-footer>
   </mat-card>

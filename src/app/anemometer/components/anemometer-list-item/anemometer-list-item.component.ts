@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Anemometer } from '../../models/anemometer.model';
 
 @Component({
@@ -10,9 +11,13 @@ export class AnemometerListItemComponent implements OnInit {
 
   @Input() anemometer!: Anemometer;
 
-  constructor() { }
+  constructor(private router: Router) { }
 
   ngOnInit(): void {
+  }
+
+  onViewAnemometer(){
+    this.router.navigateByUrl(`anemometer/${this.anemometer.id}`);
   }
 
 }

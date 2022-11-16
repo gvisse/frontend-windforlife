@@ -1,18 +1,14 @@
-.anemometer-coordinates, .anemometer-tags{
+.anemometer-coordinates{
     padding-left: 0;
 }
-.anemometer-coordinates li, .anemometer-tags li{
+.anemometer-coordinates li{
     list-style-type: none;
     display: inline-block;
     margin-left: 10px;
 }
 
-.anemometer-coordinates li:first-of-type, .anemometer-tags li:first-of-type{
+.anemometer-coordinates li:first-of-type{
     margin-left: 0;
-}
-
-.anemometer-tags{
-    padding : 5px;
 }
 
 .anemometer-meanspeeds{

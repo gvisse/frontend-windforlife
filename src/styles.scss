@@ -102,3 +102,9 @@ a {
 .box-row:first-of-type{
   border-top-color: transparent;
 }
+
+mat-form-field{
+  .mat-form-field-flex{
+    border-radius: 0 !important;
+  }
+}

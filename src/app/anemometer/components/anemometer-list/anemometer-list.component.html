@@ -1,3 +1,14 @@
+<div class="form">
+    <mat-form-field appearance="fill">
+        <input matInput type="text" [formControl]="searchCtrl">
+        <mat-icon matSuffix>search</mat-icon>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+        <mat-select [formControl]="searchTypeCtrl">
+            <mat-option *ngFor="let option of searchTypeOptions" [value]="option.value">{{ option.label }}</mat-option>
+        </mat-select>
+    </mat-form-field>
+</div>
 <div class="anemometers box-shadow">
     <div class="bold-title">
         <h2>Anemometers</h2>

@@ -13,6 +13,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatSortModule } from '@angular/material/sort';
+import { MatSelectModule } from '@angular/material/select';
 
 
 @NgModule({
@@ -30,6 +31,7 @@ import { MatSortModule } from '@angular/material/sort';
         MatExpansionModule,
         MatSortModule,
         MatTooltipModule,
+        MatSelectModule
     ]
 })
 export class MaterialModule{}

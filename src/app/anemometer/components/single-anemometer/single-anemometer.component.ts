@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { map, Observable } from 'rxjs';
+import { ActivatedRoute, Router } from '@angular/router';
+import { map, Observable, switchMap } from 'rxjs';
 import { Anemometer } from '../../models/anemometer.model';
+import { AnemometersService } from '../../services/anemometers.service';
 
 @Component({
   selector: 'app-single-anemometer',
@@ -10,15 +11,29 @@ import { Anemometer } from '../../models/anemometer.model';
 })
 export class SingleAnemometerComponent implements OnInit {
 
-  anemometer!: Anemometer;
+  loading$!: Observable<boolean>;
   anemometer$!: Observable<Anemometer>;
 
-  constructor(private route: ActivatedRoute) { }
+  constructor(private anemometersService: AnemometersService,
+              private route: ActivatedRoute,
+              private router: Router) { }
 
   ngOnInit(): void {
-    this.anemometer$ = this.route.data.pipe(
-      map(data => data['anemometer'])
-    )
+      this.initObservables();
   }
 
+  private initObservables() {
+      this.loading$ = this.anemometersService.loading$;
+      this.anemometer$ = this.route.params.pipe(
+        switchMap(params => this.anemometersService.getAnemometerById(+params['id']))
+    );
+  }
+
+  onChange(){}
+
+  onDelete(){}
+
+  onGoBack() {
+    this.router.navigateByUrl('/anemometer');
+  }
 }

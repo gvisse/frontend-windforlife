@@ -1,24 +1,34 @@
-<mat-card *ngIf="anemometer$ | async as anemometer">
-    <mat-card-header class="d-flex flex-item-center">
-      <mat-card-title class="d-flex flex-item-center">
-        <span>{{ anemometer.name | titlecase }}</span>
-      </mat-card-title>
-    </mat-card-header>
-    <mat-card-content>
-        <ul class="anemometer-coordinates">
-            <li>Lat : {{ anemometer.latitude }}</li>
-            <li>Long : {{ anemometer.longitude }}</li>
-            <li>Alt : {{ anemometer.altitude }} m</li>
-        </ul>
-        <section class="anemometer-meanspeeds" *ngIf="anemometer.mean_speed_today || anemometer.mean_speed_week">
-            <span>Mean speeds</span>
-            <ul>
-                <li *ngIf="anemometer.mean_speed_today">Today : {{ anemometer.mean_speed_today }} kn</li>
-                <li *ngIf="anemometer.mean_speed_week">This week : {{ anemometer.mean_speed_week }} kn</li>
+<mat-card>
+    <ng-container *ngIf="anemometer$ | async as anemometer">
+        <mat-card-header class="d-flex flex-item-center flex-justify-between">
+            <mat-card-title class="d-flex flex-item-center">
+                <span>{{ anemometer.name | titlecase }}</span>
+            </mat-card-title>
+            <app-tags [tags]="anemometer.tags"></app-tags>
+        </mat-card-header>
+        <mat-card-content>
+            <ul class="d-flex flex-justify-evenly">
+                <li>Lat : {{ anemometer.latitude }}</li>
+                <li>Long : {{ anemometer.longitude }}</li>
+                <li>Alt : {{ anemometer.altitude }} m</li>
             </ul>
-        </section>
-    </mat-card-content>
-    <mat-card-footer>
-        <app-tags [tags]="anemometer.tags"></app-tags>
-    </mat-card-footer>
+            <section class="anemometer-meanspeeds" *ngIf="anemometer.mean_speed_today || anemometer.mean_speed_week">
+                <span>Mean speeds</span>
+                <ul>
+                    <li *ngIf="anemometer.mean_speed_today">Today : {{ anemometer.mean_speed_today }} kn</li>
+                    <li *ngIf="anemometer.mean_speed_week">This week : {{ anemometer.mean_speed_week }} kn</li>
+                </ul>
+            </section>
+        </mat-card-content>
+    </ng-container>
+    <mat-card-actions>
+        <mat-spinner *ngIf="loading$ | async; else buttons"></mat-spinner>
+        <ng-template #buttons>
+            <div class="action-buttons">
+                <button mat-flat-button color="accent" (click)="onChange()">Modifier</button>
+                <button mat-flat-button color="warn" (click)="onDelete()">Supprimer</button>
+            </div>
+            <button mat-flat-button color="primary" (click)="onGoBack()">Retour</button>
+        </ng-template>
+    </mat-card-actions>
   </mat-card>

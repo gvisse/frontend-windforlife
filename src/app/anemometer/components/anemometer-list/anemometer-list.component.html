@@ -2,11 +2,11 @@
     <div class="bold-title">
         <h2>Anemometers</h2>
     </div>
-    <ul class="cards-container">
-        <ng-container *ngFor="let anemometer of anemometers$ | async">
-            <li class="card">
-                <app-anemometer-list-item [anemometer]="anemometer"></app-anemometer-list-item>
-            </li>
-        </ng-container>
-    </ul>
+    <mat-spinner *ngIf="loading$ | async"></mat-spinner>
+    <mat-nav-list *ngIf="anemometers$ | async as anemometers" class="d-flex flex-wrap flex-justify-between">
+        <app-anemometer-list-item class="card" mat-list-item
+            *ngFor="let anemometer of anemometers" 
+            [anemometer]="anemometer">
+        </app-anemometer-list-item>
+    </mat-nav-list>
 </div>

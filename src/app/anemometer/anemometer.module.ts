@@ -22,8 +22,7 @@ import { WindsService } from '../wind/services/winds.service';
   imports: [
     CommonModule,
     SharedModule,
-    AnemometerRoutingModule,
-    TagModule
+    AnemometerRoutingModule
   ],
   providers: [
     AnemometersService,

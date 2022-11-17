@@ -1,6 +1,7 @@
 
 import { NgModule } from '@angular/core';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatCardModule } from '@angular/material/card';
 import { MatListModule } from '@angular/material/list';
 import { MatDividerModule } from '@angular/material/divider';
@@ -27,7 +28,8 @@ import { MatSortModule } from '@angular/material/sort';
         MatMenuModule,
         MatProgressSpinnerModule,
         MatExpansionModule,
-        MatSortModule
+        MatSortModule,
+        MatTooltipModule,
     ]
 })
 export class MaterialModule{}

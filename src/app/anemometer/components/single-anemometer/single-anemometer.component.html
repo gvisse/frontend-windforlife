@@ -2,7 +2,11 @@
     <ng-container *ngIf="anemometer$ | async as anemometer">
         <mat-card-header class="d-flex flex-item-center flex-justify-between">
             <mat-card-title class="d-flex flex-item-center">
-                <span>{{ anemometer.name | titlecase }}</span>
+                <span matTooltip="Cliquez pour situer sur Maps" matTooltipPosition="right">
+                    <a href="https://www.google.com/maps/@{{anemometer.latitude}},{{anemometer.longitude}},15z" target="_blank">
+                        {{ anemometer.name | titlecase }}
+                    </a>
+                </span>
             </mat-card-title>
             <app-tags [tags]="anemometer.tags"></app-tags>
         </mat-card-header>

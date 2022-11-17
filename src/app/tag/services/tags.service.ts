@@ -29,7 +29,7 @@ export class TagsService {
     this.http.delete(`${environment.apiUrl}/tag/${id}`).pipe(
       switchMap(() => this.getTags()),
       take(1),
-      map(tags => tags.filter(tag => tag.id !== id)),
+      map(tags => (tags as any)['results'].filter((tag: any) => tag.id !== id)),
     ).subscribe();
   }
 }

@@ -7,10 +7,8 @@ import { AnemometerListItemComponent } from './components/anemometer-list-item/a
 import { SharedModule } from '../shared/shared.module';
 import { TagModule } from '../tag/tag.module';
 import { AnemometersService } from './services/anemometers.service';
-import { AnemometersResolver } from './resolvers/anemometers.resolver';
 import { TagsComponent } from './components/tags/tags.component';
 import { SingleAnemometerComponent } from './components/single-anemometer/single-anemometer.component';
-import { AnemometerByIdResolver } from './resolvers/anemometer-by-id.resolver';
 
 
 @NgModule({
@@ -28,8 +26,6 @@ import { AnemometerByIdResolver } from './resolvers/anemometer-by-id.resolver';
   ],
   providers: [
     AnemometersService,
-    AnemometersResolver,
-    AnemometerByIdResolver
   ]
 })
 export class AnemometerModule { }

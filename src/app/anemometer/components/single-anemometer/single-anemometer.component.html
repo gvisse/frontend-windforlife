@@ -19,6 +19,29 @@
                     <li *ngIf="anemometer.mean_speed_week">This week : {{ anemometer.mean_speed_week }} kn</li>
                 </ul>
             </section>
+            <mat-accordion *ngIf="winds$">
+                <mat-expansion-panel [expanded]="panelOpenState" (opened)="panelOpenState = true"
+                       (closed)="panelOpenState = false">
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>
+                            Winds
+                        </mat-panel-title>
+                        <mat-panel-description>
+                            Winds stats on {{ anemometer.name }}
+                        </mat-panel-description>
+                    </mat-expansion-panel-header>
+                    <table matSort (matSortChange)="sortData($event)">
+                        <tr>
+                        <th mat-sort-header="speed">Speed (kn)</th>
+                        <th mat-sort-header="time">Time</th>
+                        </tr>
+                        <tr *ngFor="let wind of sortedWinds">
+                            <td>{{ wind.speed }}</td>
+                            <td>{{ wind.time | date: 'Y/MM/dd,  HH:mm'}}</td>
+                        </tr>
+                    </table>
+                </mat-expansion-panel>
+            </mat-accordion>
         </mat-card-content>
     </ng-container>
     <mat-card-actions>

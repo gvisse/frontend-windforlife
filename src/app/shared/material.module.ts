@@ -9,7 +9,10 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatMenuModule } from '@angular/material/menu';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner'
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatSortModule } from '@angular/material/sort';
+
 
 @NgModule({
     exports : [
@@ -22,7 +25,9 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner'
         MatFormFieldModule,
         MatInputModule,
         MatMenuModule,
-        MatProgressSpinnerModule
+        MatProgressSpinnerModule,
+        MatExpansionModule,
+        MatSortModule
     ]
 })
 export class MaterialModule{}

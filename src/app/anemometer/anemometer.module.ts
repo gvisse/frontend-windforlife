@@ -9,6 +9,7 @@ import { TagModule } from '../tag/tag.module';
 import { AnemometersService } from './services/anemometers.service';
 import { TagsComponent } from './components/tags/tags.component';
 import { SingleAnemometerComponent } from './components/single-anemometer/single-anemometer.component';
+import { WindsService } from '../wind/services/winds.service';
 
 
 @NgModule({
@@ -26,6 +27,7 @@ import { SingleAnemometerComponent } from './components/single-anemometer/single
   ],
   providers: [
     AnemometersService,
+    WindsService
   ]
 })
 export class AnemometerModule { }

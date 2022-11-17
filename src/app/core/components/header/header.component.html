@@ -1,8 +1,24 @@
 <mat-toolbar color="primary">
     <span>WindForLife</span>
     <ul>
-        <li><a routerLink="/tag">Tags</a></li>
-        <li><a routerLink="/anemometer">Anemometers</a></li>
-        <li><a routerLink="/wind">Wind</a></li>
+        <li>
+            <button mat-button [matMenuTriggerFor]="menuTags">Tags</button>
+            <mat-menu #menuTags="matMenu">
+                <button mat-menu-item routerLink="/tag/new">New</button>
+                <button mat-menu-item routerLink="/tag">List</button>
+            </mat-menu>
+        </li>
+        <li>
+            <button mat-button [matMenuTriggerFor]="menuAnemos">Anemometers</button>
+            <mat-menu #menuAnemos="matMenu">
+                <button mat-menu-item routerLink="/anemometer">List</button>
+            </mat-menu>
+        </li>
+        <li>
+            <button mat-button [matMenuTriggerFor]="menuWinds">Winds</button>
+            <mat-menu #menuWinds="matMenu">
+                <button mat-menu-item routerLink="/wind">List</button>
+            </mat-menu>
+        </li>
     </ul>
 </mat-toolbar>

@@ -11,6 +11,7 @@
         <li>
             <button mat-button [matMenuTriggerFor]="menuAnemos">Anemometers</button>
             <mat-menu #menuAnemos="matMenu">
+                <button mat-menu-item routerLink="/anemometer/new">New</button>
                 <button mat-menu-item routerLink="/anemometer">List</button>
             </mat-menu>
         </li>

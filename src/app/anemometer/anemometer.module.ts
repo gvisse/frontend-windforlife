@@ -10,6 +10,7 @@ import { AnemometersService } from './services/anemometers.service';
 import { TagsComponent } from './components/tags/tags.component';
 import { SingleAnemometerComponent } from './components/single-anemometer/single-anemometer.component';
 import { WindsService } from '../wind/services/winds.service';
+import { AnemometerNewComponent } from './components/anemometer-new/anemometer-new.component';
 
 
 @NgModule({
@@ -17,7 +18,8 @@ import { WindsService } from '../wind/services/winds.service';
     AnemometerListComponent,
     AnemometerListItemComponent,
     TagsComponent,
-    SingleAnemometerComponent
+    SingleAnemometerComponent,
+    AnemometerNewComponent
   ],
   imports: [
     CommonModule,

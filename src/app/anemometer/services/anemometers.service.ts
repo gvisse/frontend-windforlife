@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { map, tap, Observable, BehaviorSubject, delay} from 'rxjs';
+import { map, tap, Observable, BehaviorSubject, delay, switchMap, take} from 'rxjs';
 import { Anemometer } from 'src/app/anemometer/models/anemometer.model';
 import { environment } from '../../../environments/environment';
 
@@ -47,6 +47,20 @@ export class AnemometersService {
     return this.anemometers$.pipe(
         map(anemometers => anemometers.filter(anemometer => anemometer.id === id)[0])
     );
+  }
+
+  deleteAnemometer(id: number): void {
+    this.setLoadingStatus(true);
+    this.http.delete(`${environment.apiUrl}/anemometer/${id}`).pipe(
+        delay(1000),
+        switchMap(() => this.anemometers$),
+        take(1),
+        map(anemometers => anemometers.filter((anemometer:Anemometer) => anemometer.id !== id)),
+        tap(anemometers => {
+            this._anemometers$.next(anemometers);
+            this.setLoadingStatus(false);
+        })
+    ).subscribe();
   }
 
   // updateAnemometerTags -> choisir quel tag on ajoute avec un select (multiple) sortant tous les tags disponibles (et déjà assigné à l'anémomètre)

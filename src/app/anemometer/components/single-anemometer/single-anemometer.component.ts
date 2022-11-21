@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Sort } from '@angular/material/sort';
 import { ActivatedRoute, Router } from '@angular/router';
-import { map, Observable, switchMap } from 'rxjs';
+import { map, Observable, switchMap, take, tap } from 'rxjs';
 import { Wind } from 'src/app/wind/models/wind.model';
 import { WindsService } from 'src/app/wind/services/winds.service';
 import { Anemometer } from '../../models/anemometer.model';
@@ -48,7 +48,15 @@ export class SingleAnemometerComponent implements OnInit {
 
   onChange(){}
 
-  onDelete(){}
+  onDelete(){
+    this.anemometer$.pipe(
+      take(1),
+      tap(anemometer =>{
+        this.anemometersService.deleteAnemometer(anemometer.id);
+        this.onGoBack();
+      })
+    ).subscribe();
+  }
 
   onGoBack() {
     this.router.navigateByUrl('/anemometer');

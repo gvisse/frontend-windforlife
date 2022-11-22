@@ -1,8 +1,10 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { WindListComponent } from './components/wind-list/wind-list.component';
+import { WindAddComponent } from './components/wind-add/wind-add.component';
 
 const routes: Routes = [
+  { path: 'add/:id', component: WindAddComponent },
   { path: '', component: WindListComponent }
 ];
 

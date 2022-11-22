@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Tag } from '../../models/tag.model';
 
 @Component({
@@ -9,10 +9,14 @@ import { Tag } from '../../models/tag.model';
 export class TagListItemComponent implements OnInit {
 
   @Input() tag!: Tag;
+  @Output() deletedTag = new EventEmitter<{id :number}>();
 
   constructor() { }
 
   ngOnInit(): void {
   }
 
+  onDelete(){
+    this.deletedTag.emit({id: this.tag.id});
+  }
 }

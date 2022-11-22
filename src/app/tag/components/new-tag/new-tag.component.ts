@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { tap } from 'rxjs';
@@ -12,10 +12,9 @@ import { TagsService } from '../../services/tags.service';
 export class NewTagComponent implements OnInit {
 
   tagCtrl!: FormControl;
+  @Output() createdTag = new EventEmitter<{name:string}>();
 
-  constructor(private formBuilder: FormBuilder,
-              private tagsService: TagsService,
-              private router: Router) { }
+  constructor(private formBuilder: FormBuilder) { }
 
   ngOnInit(): void {
     this.tagCtrl = this.formBuilder.control('', [Validators.required, Validators.minLength(3)]);
@@ -25,8 +24,7 @@ export class NewTagComponent implements OnInit {
     if(this.tagCtrl.invalid){
       return;
     }
-    this.tagsService.createTag(this.tagCtrl.value).pipe(
-      tap(() => this.router.navigateByUrl('tag'))
-    ).subscribe();
+    this.createdTag.emit({name:this.tagCtrl.value});
+    this.tagCtrl.reset('');
   }
 }

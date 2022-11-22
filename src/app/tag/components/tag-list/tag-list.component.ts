@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { map, Observable } from 'rxjs';
 import { Tag } from '../../models/tag.model';
+import { TagsService } from '../../services/tags.service';
 
 @Component({
   selector: 'app-tag-list',
@@ -11,13 +12,32 @@ import { Tag } from '../../models/tag.model';
 export class TagListComponent implements OnInit {
 
   tags$!: Observable<Tag[]>;
-  
-  constructor(private route: ActivatedRoute) { }
+  countTags$!: Observable<number>;
+  loading$!: Observable<boolean>;
+
+  constructor(private tagsService: TagsService) { }
 
   ngOnInit(): void {
-    this.tags$ = this.route.data.pipe(
-      map(data => data['tags']['results'])
-    );
+    this.initObservable();
+    this.tagsService.getTagsFromServeur();
   }
 
+  private initObservable(){
+    this.loading$ = this.tagsService.loading$;
+    this.tags$ = this.tagsService.tags$;
+    this.countTags$ = this.tagsService.countTags$;
+  }
+
+  onDeleteTag(deletedTag: {id: number}){
+    this.tagsService.deleteTag(deletedTag.id);
+  }
+
+  onCreateTag(createdTag: {name: string}){
+    this.tagsService.createTag(createdTag.name);
+  }
+
+  onChangePage(eventPage:any){
+    console.log(eventPage);
+    this.tagsService.goToPage(eventPage.pageIndex+1);
+  }
 }

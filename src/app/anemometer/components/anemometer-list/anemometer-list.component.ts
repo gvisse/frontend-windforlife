@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
 import { combineLatest, map, Observable, startWith } from 'rxjs';
 import { AnemometerSearchType } from '../../enums/anemometer-search-type.enum';
 import { Anemometer } from '../../models/anemometer.model';
@@ -25,7 +24,9 @@ export class AnemometerListComponent implements OnInit {
   }[];
 
   constructor(private anemometersService: AnemometersService,
-              private fb: FormBuilder) { }
+              private fb: FormBuilder)
+  {
+  }
 
   ngOnInit(): void {
     this.initForm();
@@ -59,7 +60,7 @@ export class AnemometerListComponent implements OnInit {
       this.anemometersService.anemometers$
       ]
     ).pipe(
-        map(([search, searchType, candidates]) => candidates.filter(anemometer => anemometer[searchType]
+        map(([search, searchType, anemometers]) => anemometers.filter((anemometer:any) => anemometer[searchType]
             .toString()
             .toLowerCase()
             .includes(search as string))

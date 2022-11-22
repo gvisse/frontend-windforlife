@@ -37,7 +37,6 @@ export class TagListComponent implements OnInit {
   }
 
   onChangePage(eventPage:any){
-    console.log(eventPage);
-    this.tagsService.goToPage(eventPage.pageIndex+1);
+    this.tagsService.goToPage({page: eventPage.pageIndex+1, size: eventPage.pageSize});
   }
 }

@@ -40,10 +40,16 @@ export class TagsService {
 
   private lastTagsLoaded = 0;
 
-  private getTags(page?: number): void{
+  private getTags(page?: number, size?: number): void{
     let getUrl = `${environment.apiUrl}/tag/`;
+    if(typeof page !== 'undefined' || typeof size !== 'undefined'){
+      getUrl += '?';
+    }
     if(typeof page !== 'undefined' && page > 0){
-      getUrl += `?page=${page}`
+      getUrl += `&page=${page}`;
+    }
+    if(typeof size !== 'undefined' && size > 0){
+      getUrl += `&page_size=${size}`;
     }
     this.http.get<Tag[]>(getUrl).pipe(
       delay(1000),
@@ -82,9 +88,8 @@ export class TagsService {
     ).subscribe();
   }
 
-  goToPage(page: number): void{
-    console.log(page)
+  goToPage(pageEvent: {page: number, size: number}): void{
     this.setLoadingStatus(true);
-    this.getTags(page);
+    this.getTags(pageEvent.page, pageEvent.size);
   }
 }

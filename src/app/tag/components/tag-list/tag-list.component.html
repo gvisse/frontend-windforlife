@@ -18,5 +18,6 @@
 </div>
 <mat-paginator *ngIf="tags$ | async as tags" [length]="countTags$ | async"
     [pageSize]="tags.length"
+    [pageSizeOptions]="[10, 25, 50, 100]"
     aria-label="Select page" (page)="onChangePage($event)">
 </mat-paginator>

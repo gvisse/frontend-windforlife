@@ -14,6 +14,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatSortModule } from '@angular/material/sort';
 import { MatSelectModule } from '@angular/material/select';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 
 @NgModule({
@@ -31,7 +33,9 @@ import { MatSelectModule } from '@angular/material/select';
         MatExpansionModule,
         MatSortModule,
         MatTooltipModule,
-        MatSelectModule
+        MatSelectModule,
+        MatChipsModule,
+        MatAutocompleteModule,
     ]
 })
 export class MaterialModule{}

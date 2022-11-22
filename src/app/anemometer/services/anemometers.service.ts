@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map, tap, Observable, BehaviorSubject, delay, switchMap, take} from 'rxjs';
 import { Anemometer } from 'src/app/anemometer/models/anemometer.model';
+import { Tag } from 'src/app/tag/models/tag.model';
 import { environment } from '../../../environments/environment';
 
 @Injectable()
@@ -25,11 +26,7 @@ export class AnemometersService {
 
   private lastAnemosLoaded = 0;
 
-  getAnemometersFromServeur(){
-    if (Date.now() - this.lastAnemosLoaded <= 300000) {
-      return;
-    }
-    this.setLoadingStatus(true);
+  private getAnemometers(){
     this.http.get<Anemometer[]>(`${environment.apiUrl}/anemometer/`).pipe(
       delay(1000),
       tap(anemometers => {
@@ -38,6 +35,14 @@ export class AnemometersService {
         this.setLoadingStatus(false);
       })
     ).subscribe();
+  }
+
+  getAnemometersFromServeur(){
+    if (Date.now() - this.lastAnemosLoaded <= 300000) {
+      return;
+    }
+    this.setLoadingStatus(true);
+    this.getAnemometers();
   }
 
   getAnemometerById(id: number): Observable<Anemometer> {
@@ -60,6 +65,13 @@ export class AnemometersService {
             this._anemometers$.next(anemometers);
             this.setLoadingStatus(false);
         })
+    ).subscribe();
+  }
+
+  addAnemometer(formValue: {name: string, latitude:number, longitude: number, altitude: number, tags: {id: number, name: string}[] | null}){
+    this.http.post<Anemometer>(`${environment.apiUrl}/anemometer/`, formValue).pipe(
+      delay(1000),
+      tap(() => this.getAnemometers())
     ).subscribe();
   }
 

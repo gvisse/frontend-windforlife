@@ -19,6 +19,11 @@ export class AnemometersService {
   get anemometers$(): Observable<Anemometer[]> {
     return this._anemometers$.asObservable();
   }
+
+  private _allAnemometers$ = new BehaviorSubject<Anemometer[]>([]);
+  get allAnemometers$(): Observable<Anemometer[]>{
+    return this._allAnemometers$.asObservable();
+  }
   
   private setLoadingStatus(loading: boolean){
     this._loading$.next(loading);
@@ -33,6 +38,16 @@ export class AnemometersService {
         this.lastAnemosLoaded = Date.now();
         this._anemometers$.next((anemometers as any)['results']);
         this.setLoadingStatus(false);
+      })
+    ).subscribe();
+  }
+
+  getAllAnemometers(): void{
+    this.http.get<Tag[]>(`${environment.apiUrl}/anemometer/?page_size=0`).pipe(
+      delay(1000),
+      tap((anemos:any) => {
+        this.lastAnemosLoaded = Date.now();
+        this._allAnemometers$.next(anemos);
       })
     ).subscribe();
   }

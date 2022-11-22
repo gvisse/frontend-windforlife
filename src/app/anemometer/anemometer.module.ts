@@ -11,6 +11,7 @@ import { SingleAnemometerComponent } from './components/single-anemometer/single
 import { WindsService } from '../wind/services/winds.service';
 import { AnemometerNewComponent } from './components/anemometer-new/anemometer-new.component';
 import { TagsService } from '../tag/services/tags.service';
+import { WindModule } from '../wind/wind.module';
 
 
 @NgModule({
@@ -24,7 +25,8 @@ import { TagsService } from '../tag/services/tags.service';
   imports: [
     CommonModule,
     SharedModule,
-    AnemometerRoutingModule
+    AnemometerRoutingModule,
+    WindModule
   ],
   providers: [
     AnemometersService,

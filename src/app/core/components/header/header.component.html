@@ -17,6 +17,7 @@
         <li>
             <button mat-button [matMenuTriggerFor]="menuWinds">Winds</button>
             <mat-menu #menuWinds="matMenu">
+                <button mat-menu-item routerLink="/wind/new">New</button>
                 <button mat-menu-item routerLink="/wind">List</button>
             </mat-menu>
         </li>

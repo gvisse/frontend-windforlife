@@ -4,7 +4,8 @@ import { WindListComponent } from './components/wind-list/wind-list.component';
 import { WindAddComponent } from './components/wind-add/wind-add.component';
 
 const routes: Routes = [
-  { path: 'add/:id', component: WindAddComponent },
+  { path: 'new/:id', component: WindAddComponent },
+  { path: 'new', component: WindAddComponent },
   { path: '', component: WindListComponent }
 ];
 

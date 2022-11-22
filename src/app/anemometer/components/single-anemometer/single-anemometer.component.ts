@@ -84,7 +84,7 @@ export class SingleAnemometerComponent implements OnInit {
 
   addWind(){
     this.route.params.pipe(
-      switchMap(params =>  this.router.navigateByUrl(`/wind/add/${params['id']}`))
+      switchMap(params =>  this.router.navigateByUrl(`/wind/new/${params['id']}`))
     ).subscribe();
   }
 }

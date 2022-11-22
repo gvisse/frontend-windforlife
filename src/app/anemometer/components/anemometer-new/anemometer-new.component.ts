@@ -50,7 +50,7 @@ export class AnemometerNewComponent implements OnInit {
   ngOnInit() {
     this.initForm();
     this.initObservables();
-    this.tagsService.getTagsFromServeur();
+    this.tagsService.getAllTags();
   }
 
   private initForm(){
@@ -64,7 +64,7 @@ export class AnemometerNewComponent implements OnInit {
   }
   
   private initObservables(){
-    this.allTags$ = this.tagsService.tags$;
+    this.allTags$ = this.tagsService.allTags$;
     this.filteredTags$ = this.tagControl.valueChanges.pipe(
       startWith(null),
       map((tagName: string | null) => (

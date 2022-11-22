@@ -19,6 +19,11 @@ export class TagsService {
     return this._tags$.asObservable();
   }
 
+  private _allTags$ = new BehaviorSubject<Tag[]>([]);
+  get allTags$(): Observable<Tag[]> {
+    return this._allTags$.asObservable();
+  }
+
   private _countTags$ = new BehaviorSubject<number>(0);
   get countTags$(): Observable<number>{
     return this._countTags$.asObservable();
@@ -40,17 +45,18 @@ export class TagsService {
 
   private lastTagsLoaded = 0;
 
+  private setUrl(params: {[key:string]: string|number|undefined}[]): string{
+    let getUrl = `${environment.apiUrl}/tag/?`;
+    for(let param of params){
+      for(let key in param){
+        if(typeof param[key] !== 'undefined') getUrl += `&${key}=${param[key]}`
+      }
+    }
+    return getUrl;
+  }
+
   private getTags(page?: number, size?: number): void{
-    let getUrl = `${environment.apiUrl}/tag/`;
-    if(typeof page !== 'undefined' || typeof size !== 'undefined'){
-      getUrl += '?';
-    }
-    if(typeof page !== 'undefined' && page > 0){
-      getUrl += `&page=${page}`;
-    }
-    if(typeof size !== 'undefined' && size > 0){
-      getUrl += `&page_size=${size}`;
-    }
+    const getUrl = this.setUrl([{'page': page}, {'size': size}]);
     this.http.get<Tag[]>(getUrl).pipe(
       delay(1000),
       tap((tags:any) => {
@@ -59,6 +65,18 @@ export class TagsService {
         this._countTags$.next(tags['count']);
         this._nextPage$.next(tags['next']);
         this._previousPage$.next(tags['previous']);
+        this.setLoadingStatus(false);
+      })
+    ).subscribe();
+  }
+
+  getAllTags(): void{
+    this.setLoadingStatus(true);
+    this.http.get<Tag[]>(`${environment.apiUrl}/tag/?page_size=0`).pipe(
+      delay(1000),
+      tap((tags:any) => {
+        this.lastTagsLoaded = Date.now();
+        this._allTags$.next(tags);
         this.setLoadingStatus(false);
       })
     ).subscribe();

@@ -2,6 +2,7 @@
     <div class="bold-title">
         <h2>Winds</h2>
     </div>
+    <mat-spinner *ngIf="loading$ | async"></mat-spinner>
     <ng-container *ngFor="let wind of winds$ | async">
         <mat-list-item>
             <app-wind-list-item [wind]="wind"></app-wind-list-item>

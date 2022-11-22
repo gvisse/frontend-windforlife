@@ -1,1 +1,19 @@
-<p>wind-add works!</p>
+<form [formGroup]="windForm">
+    <mat-form-field appearance="fill">
+        <mat-label>Speed</mat-label>
+        <input matInput type="number" placeholder="Speed" formControlName="speed">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+        <mat-label>Date</mat-label>
+        <input matInput type="datetime-local" placeholder="start date" formControlName="time">
+        <mat-error *ngIf="windForm.controls['time'].errors">{{windForm.controls['time'].errors['invalidDate']}}</mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+        <mat-label>Anemometer</mat-label>
+        <mat-select formControlName="anemometer">
+            <mat-option *ngFor="let anemometer of allAnemometers$ | async" [value]="anemometer.id">
+                {{anemometer.name}}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+</form>

@@ -13,7 +13,6 @@ import { AnemometerNewComponent } from './components/anemometer-new/anemometer-n
 import { TagsService } from '../tag/services/tags.service';
 import { WindModule } from '../wind/wind.module';
 
-
 @NgModule({
   declarations: [
     AnemometerListComponent,

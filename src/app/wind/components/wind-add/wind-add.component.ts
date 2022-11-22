@@ -39,19 +39,29 @@ export class WindAddComponent implements OnInit {
       {
         speed: [null, [Validators.required, Validators.min(0)]],
         time: [null, [Validators.required,]],
-        anemometer : this.anemometerCtrl
+        anemometer_id : this.anemometerCtrl
       },{
         updateOn: 'blur'
       }
     )
     if(this.anemometer_id){
-      this.windForm.controls['anemometer'].setValue(this.anemometer_id);
-      this.windForm.controls['anemometer'].disable();
+      this.windForm.controls['anemometer_id'].setValue(this.anemometer_id);
     }
   }
 
   private initObservables(){
     this.allAnemometers$ = this.anemometersService.allAnemometers$;
+  }
+
+  addWind(){
+    if(this.windForm.invalid){
+      return;
+    }
+    console.log(this.windForm.value);
+    if(this.anemometer_id){
+      this.createdWind.emit(this.windForm.value)
+    }
+    this.windForm.reset('');
   }
 
 }

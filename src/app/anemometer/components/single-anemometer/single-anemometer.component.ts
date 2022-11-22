@@ -37,13 +37,22 @@ export class SingleAnemometerComponent implements OnInit {
       this.anemometer$ = this.route.params.pipe(
         switchMap(params => this.anemometersService.getAnemometerById(+params['id']))
       );
-      this.winds$ = this.route.params.pipe(
-        switchMap(params => this.windsService.getWindsAnemometerByAnemometerId(+params['id']))
-      );
-      this.winds$.subscribe( data => {
-        this.winds = data,
-        this.sortedWinds = this.winds.slice();
-      });
+      this.refreshWindObservables();
+  }
+
+  private refreshWindObservables(){
+    this.winds$ = this.route.params.pipe(
+      switchMap(params => this.windsService.getWindsAnemometerByAnemometerId(+params['id']))
+    );
+    this.winds$.subscribe( data => {
+      this.winds = data,
+      this.sortedWinds = this.winds.slice();
+    });
+  }
+
+  onCreateWind(createdWind: {speed: number, time: Date, anemometer_id:number}){
+    this.windsService.createWind(createdWind);
+    this.refreshWindObservables();
   }
 
   onChange(){}
@@ -80,12 +89,6 @@ export class SingleAnemometerComponent implements OnInit {
           return 0;
       }
     });
-  }
-
-  addWind(){
-    this.route.params.pipe(
-      switchMap(params =>  this.router.navigateByUrl(`/wind/new/${params['id']}`))
-    ).subscribe();
   }
 }
 

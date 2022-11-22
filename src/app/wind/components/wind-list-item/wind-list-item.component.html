@@ -4,6 +4,6 @@
         <span>At : {{ wind.time | date: 'dd/MM/yy, à HH:mm' }}</span>
     </div>
     <div class="wind-anemometer d-flex flex-item-center flex-justify-end col-6">
-        <a mat-flat-button color="accent" routerLink="/anemometer">Anemometer : {{ wind.anemometer }}</a>
+        <a mat-flat-button color="accent" routerLink="/anemometer/{{wind.anemometer_id}}">Anemometer : {{ wind.anemometer_id }}</a>
     </div>
 </section>

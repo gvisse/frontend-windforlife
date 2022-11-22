@@ -45,8 +45,7 @@
                         </tr>
                     </table>
                     <mat-action-row>
-                        <app-wind-add [anemometer_id]="anemometer.id"></app-wind-add>
-                        <button mat-button color="primary" (click)="addWind()">Add wind</button>
+                        <app-wind-add [anemometer_id]="anemometer.id" (createdWind)="onCreateWind($event)"></app-wind-add>
                     </mat-action-row>
                 </mat-expansion-panel>
             </mat-accordion>

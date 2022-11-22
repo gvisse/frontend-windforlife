@@ -10,10 +10,11 @@
     </mat-form-field>
     <mat-form-field appearance="fill">
         <mat-label>Anemometer</mat-label>
-        <mat-select formControlName="anemometer">
-            <mat-option *ngFor="let anemometer of allAnemometers$ | async" [value]="anemometer.id">
+        <mat-select formControlName="anemometer_id">
+            <mat-option *ngFor="let anemometer of allAnemometers$ | async" [disabled]="anemometer_id ? (anemometer_id !== anemometer.id ? true: false) : false" [value]="anemometer.id">
                 {{anemometer.name}}
             </mat-option>
         </mat-select>
     </mat-form-field>
+    <button mat-button color="primary" (click)="addWind()">Add wind</button>
 </form>

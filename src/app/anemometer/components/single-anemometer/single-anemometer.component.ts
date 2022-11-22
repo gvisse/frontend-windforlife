@@ -81,6 +81,12 @@ export class SingleAnemometerComponent implements OnInit {
       }
     });
   }
+
+  addWind(){
+    this.route.params.pipe(
+      switchMap(params =>  this.router.navigateByUrl(`/wind/add/${params['id']}`))
+    ).subscribe();
+  }
 }
 
 function compare(a: number | string | Date, b: number | string | Date, isAsc: boolean) {

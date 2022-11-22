@@ -44,6 +44,9 @@
                             <td>{{ wind.time | date: 'Y/MM/dd,  HH:mm'}}</td>
                         </tr>
                     </table>
+                    <mat-action-row>
+                        <button mat-button color="primary" (click)="addWind()">Add wind</button>
+                    </mat-action-row>
                 </mat-expansion-panel>
             </mat-accordion>
         </mat-card-content>

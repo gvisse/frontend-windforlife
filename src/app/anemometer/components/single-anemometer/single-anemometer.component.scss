@@ -14,3 +14,19 @@ mat-card{
 a{
     color: #673ab7;
 }
+
+table{
+    width: 100%
+}
+
+.mat-card-actions{
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.action-buttons{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}

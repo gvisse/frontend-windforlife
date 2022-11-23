@@ -18,19 +18,47 @@ export class WindsService {
   get winds$(): Observable<Wind[]> {
     return this._winds$.asObservable();
   }
-  
+
+  private _countWinds$ = new BehaviorSubject<number>(0);
+  get countWinds$(): Observable<number>{
+    return this._countWinds$.asObservable();
+  }
+  private _nextPage$ = new BehaviorSubject<string>('');
+  get nextPage$(): Observable<string>{
+    return this._nextPage$.asObservable();
+  }
+
+  private _previousPage$ = new BehaviorSubject<string>('');
+  get previousPage$(): Observable<string>{
+    return this._previousPage$.asObservable();
+  }
+
   private setLoadingStatus(loading: boolean){
     this._loading$.next(loading);
   }
 
   private lastWindsLoaded = 0;
 
-  private getWinds(){
-    this.http.get<Wind[]>(`${environment.apiUrl}/wind/`).pipe(
+  private setUrl(params: {[key:string]: string|number|undefined}[]): string{
+    let getUrl = `${environment.apiUrl}/wind/?`;
+    for(let param of params){
+      for(let key in param){
+        if(typeof param[key] !== 'undefined') getUrl += `&${key}=${param[key]}`
+      }
+    }
+    return getUrl;
+  }
+
+  private getWinds(anemometer_id?: number, page?: number, size?:number){
+    const getUrl = this.setUrl([{'anemometer_id': anemometer_id}, {'page': page}, {'page_size': size}])
+    this.http.get<Wind[]>(getUrl).pipe(
       delay(1000),
-      tap(winds => {
+      tap((winds: any) => {
         this.lastWindsLoaded = Date.now();
-        this._winds$.next((winds as any)['results']);
+        this._winds$.next(winds['results']);
+        this._countWinds$.next(winds['count']);
+        this._nextPage$.next(winds['next']);
+        this._previousPage$.next(winds['previous']);
         this.setLoadingStatus(false);
       })
     ).subscribe();
@@ -44,15 +72,15 @@ export class WindsService {
     this.getWinds();
   }
 
-  getWindsAnemometerByAnemometerId(id: number): Observable<Wind[]> {    
-    return this.http.get<Wind[]>(`${environment.apiUrl}/wind?anemometer_id=${id}`).pipe(
-      map((data: any) => data['results'])
-    );
+  getWindsAnemometerByAnemometerId(id: number, page?: number, size?: number){  
+    this.setLoadingStatus(true);
+    this.getWinds(id, page, size);
+    return this.winds$
   }
 
   createWind(formValue: {speed: number, time: Date, anemometer_id: number}){
     this.setLoadingStatus(true);
-    this.http.post<Wind>(`${environment.apiUrl}/wind/`, {anemometer_id: formValue.anemometer_id, speed:formValue.speed, time:formValue.time}).pipe(
+    this.http.post<Wind>(`${environment.apiUrl}/wind/`, formValue).pipe(
       delay(1000),
       tap(() => this.getWinds())
     ).subscribe();

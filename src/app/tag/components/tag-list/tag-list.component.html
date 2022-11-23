@@ -4,8 +4,8 @@
         <span class="box-title">Tags</span>
     </div>
     <ul class="box-container">
-        <mat-spinner *ngIf="loading$ | async"></mat-spinner>
-        <ng-container *ngIf="loading$">
+        <mat-spinner *ngIf="loading$ | async; else tags"></mat-spinner>
+        <ng-template #tags>
             <ng-container *ngIf="tags$ | async as tags">
                 <li class="box-row" *ngFor="let tag of tags">
                     <app-tag-list-item
@@ -13,7 +13,7 @@
                     </app-tag-list-item>
                 </li>
             </ng-container>
-        </ng-container>
+        </ng-template>
     </ul>
 </div>
 <mat-paginator *ngIf="tags$ | async as tags" [length]="countTags$ | async"

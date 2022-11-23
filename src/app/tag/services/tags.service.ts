@@ -56,7 +56,7 @@ export class TagsService {
   }
 
   private getTags(page?: number, size?: number): void{
-    const getUrl = this.setUrl([{'page': page}, {'size': size}]);
+    const getUrl = this.setUrl([{'page': page}, {'page_size': size}]);
     this.http.get<Tag[]>(getUrl).pipe(
       delay(1000),
       tap((tags:any) => {

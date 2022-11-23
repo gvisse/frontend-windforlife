@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { Anemometer } from 'src/app/anemometer/models/anemometer.model';
 import { AnemometersService } from 'src/app/anemometer/services/anemometers.service';
 import { WindsService } from '../../services/winds.service';
+import { dateValidator } from '../../validators/dateInFuture.validator';
 
 @Component({
   selector: 'app-wind-add',
@@ -38,7 +39,7 @@ export class WindAddComponent implements OnInit {
     this.windForm = this.fb.group(
       {
         speed: [null, [Validators.required, Validators.min(0)]],
-        time: [null, [Validators.required,]],
+        time: [null, [Validators.required, dateValidator()]],
         anemometer_id : this.anemometerCtrl
       },{
         updateOn: 'blur'

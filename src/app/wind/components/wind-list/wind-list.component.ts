@@ -27,4 +27,8 @@ export class WindListComponent implements OnInit {
     this.winds$ = this.windsService.winds$;
   }
 
+  onCreateWind(createdWind: {speed: number, time: Date, anemometer_id:number}){
+    this.windsService.createWind(createdWind);
+  }
+
 }

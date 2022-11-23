@@ -1,13 +1,19 @@
 <mat-list class="winds box-shadow">
-    <div class="bold-title">
-        <h2>Winds</h2>
+    <div class="winds-header">
+        <div class="bold-title">
+            <h2>Winds</h2>
+        </div>
+        <app-wind-add (createdWind)="onCreateWind($event)"></app-wind-add>
     </div>
+    <mat-divider></mat-divider>
     <mat-spinner *ngIf="loading$ | async"></mat-spinner>
-    <ng-container *ngFor="let wind of winds$ | async">
-        <mat-list-item>
-            <app-wind-list-item [wind]="wind"></app-wind-list-item>
-        </mat-list-item>
-        <mat-divider></mat-divider>
+    <ng-container *ngIf="loading$">
+        <ng-container *ngFor="let wind of winds$ | async">
+            <mat-list-item>
+                <app-wind-list-item [wind]="wind"></app-wind-list-item>
+            </mat-list-item>
+            <mat-divider></mat-divider>
+        </ng-container>
     </ng-container>
 </mat-list>
 

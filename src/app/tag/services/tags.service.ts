@@ -58,7 +58,6 @@ export class TagsService {
   private getTags(page?: number, size?: number): void{
     const getUrl = this.setUrl([{'page': page}, {'page_size': size}]);
     this.http.get<Tag[]>(getUrl).pipe(
-      delay(1000),
       tap((tags:any) => {
         this.lastTagsLoaded = Date.now();
         this._tags$.next(tags['results']);
@@ -73,7 +72,6 @@ export class TagsService {
   getAllTags(): void{
     this.setLoadingStatus(true);
     this.http.get<Tag[]>(`${environment.apiUrl}/tag/?page_size=0`).pipe(
-      delay(1000),
       tap((tags:any) => {
         this.lastTagsLoaded = Date.now();
         this._allTags$.next(tags);
@@ -93,7 +91,6 @@ export class TagsService {
   createTag(name: string): void{
     this.setLoadingStatus(true);
     this.http.post<Tag>(`${environment.apiUrl}/tag/`, {name : name}).pipe(
-      delay(1000),
       tap(() => this.getTags())
     ).subscribe();
   }
@@ -101,7 +98,6 @@ export class TagsService {
   deleteTag(id: number): void {
     this.setLoadingStatus(true);
     this.http.delete(`${environment.apiUrl}/tag/${id}`).pipe(
-        delay(1000),
         tap(() => this.getTags())
     ).subscribe();
   }

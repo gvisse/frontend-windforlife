@@ -33,7 +33,6 @@ export class AnemometersService {
 
   private getAnemometers(){
     this.http.get<Anemometer[]>(`${environment.apiUrl}/anemometer/`).pipe(
-      delay(1000),
       tap(anemometers => {
         this.lastAnemosLoaded = Date.now();
         this._anemometers$.next((anemometers as any)['results']);
@@ -44,7 +43,6 @@ export class AnemometersService {
 
   getAllAnemometers(): void{
     this.http.get<Tag[]>(`${environment.apiUrl}/anemometer/?page_size=0`).pipe(
-      delay(1000),
       tap((anemos:any) => {
         this.lastAnemosLoaded = Date.now();
         this._allAnemometers$.next(anemos);
@@ -72,7 +70,6 @@ export class AnemometersService {
   deleteAnemometer(id: number): void {
     this.setLoadingStatus(true);
     this.http.delete(`${environment.apiUrl}/anemometer/${id}`).pipe(
-        delay(1000),
         switchMap(() => this.anemometers$),
         take(1),
         map(anemometers => anemometers.filter((anemometer:Anemometer) => anemometer.id !== id)),
@@ -85,7 +82,6 @@ export class AnemometersService {
 
   addAnemometer(formValue: {name: string, latitude:number, longitude: number, altitude: number, tags: {id: number, name: string}[] | null}){
     this.http.post<Anemometer>(`${environment.apiUrl}/anemometer/`, formValue).pipe(
-      delay(1000),
       tap(() => this.getAnemometers())
     ).subscribe();
   }

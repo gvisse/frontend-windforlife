@@ -52,7 +52,6 @@ export class WindsService {
   private getWinds(anemometer_id?: number, page?: number, size?:number){
     const getUrl = this.setUrl([{'anemometer_id': anemometer_id}, {'page': page}, {'page_size': size}])
     this.http.get<Wind[]>(getUrl).pipe(
-      delay(1000),
       tap((winds: any) => {
         this.lastWindsLoaded = Date.now();
         this._winds$.next(winds['results']);
@@ -81,8 +80,14 @@ export class WindsService {
   createWind(formValue: {speed: number, time: Date, anemometer_id: number}){
     this.setLoadingStatus(true);
     this.http.post<Wind>(`${environment.apiUrl}/wind/`, formValue).pipe(
-      delay(1000),
       tap(() => this.getWinds())
+    ).subscribe();
+  }
+
+  deleteWind(id: number, anemometer_id?: number){
+    this.setLoadingStatus(true);
+    this.http.delete(`${environment.apiUrl}/wind/${id}`).pipe(
+        tap(() => this.getWinds(anemometer_id))
     ).subscribe();
   }
 }

@@ -69,7 +69,7 @@
         <mat-spinner *ngIf="loading$ | async; else buttons"></mat-spinner>
         <ng-template #buttons>
             <div class="action-buttons">
-                <button mat-flat-button color="accent" (click)="onChange()">Update</button>
+                <a mat-flat-button color="accent" routerLink="update">Update</a>
                 <button mat-flat-button color="warn" (click)="onDelete()">Delete</button>
             </div>
             <button mat-flat-button color="primary" (click)="onGoBack()">Go Back</button>

@@ -13,11 +13,13 @@
     <div class="bold-title">
         <h2>Anemometers</h2>
     </div>
-    <mat-spinner *ngIf="loading$ | async"></mat-spinner>
-    <mat-nav-list *ngIf="anemometers$ | async as anemometers" class="d-flex flex-wrap flex-justify-between">
-        <app-anemometer-list-item class="card" mat-list-item
-            *ngFor="let anemometer of anemometers" 
-            [anemometer]="anemometer">
-        </app-anemometer-list-item>
-    </mat-nav-list>
+    <mat-spinner *ngIf="loading$ | async; else anemos"></mat-spinner>
+    <ng-template #anemos>
+        <mat-nav-list *ngIf="anemometers$ | async as anemometers" class="d-flex flex-wrap flex-justify-between">
+            <app-anemometer-list-item class="card" mat-list-item
+                *ngFor="let anemometer of anemometers" 
+                [anemometer]="anemometer">
+            </app-anemometer-list-item>
+        </mat-nav-list>
+    </ng-template>
 </div>

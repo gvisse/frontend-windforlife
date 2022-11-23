@@ -15,8 +15,10 @@ import { AnemometersService } from '../../services/anemometers.service';
 export class SingleAnemometerComponent implements OnInit {
 
   loading$!: Observable<boolean>;
+  loadingWinds$!: Observable<boolean>;
   anemometer$!: Observable<Anemometer>;
   winds$!: Observable<Wind[]>;
+  countWinds$!: Observable<number>;
 
   winds!: Wind[];
   sortedWinds!: Wind[];
@@ -34,15 +36,17 @@ export class SingleAnemometerComponent implements OnInit {
 
   private initObservables() {
       this.loading$ = this.anemometersService.loading$;
+      this.loadingWinds$ = this.windsService.loading$;
       this.anemometer$ = this.route.params.pipe(
         switchMap(params => this.anemometersService.getAnemometerById(+params['id']))
       );
       this.refreshWindObservables();
+      this.countWinds$ = this.windsService.countWinds$;
   }
 
-  private refreshWindObservables(){
+  private refreshWindObservables(page?: number, pageSize?: number){
     this.winds$ = this.route.params.pipe(
-      switchMap(params => this.windsService.getWindsAnemometerByAnemometerId(+params['id']))
+      switchMap(params => this.windsService.getWindsAnemometerByAnemometerId(+params['id'], page, pageSize))
     );
     this.winds$.subscribe( data => {
       this.winds = data,
@@ -53,6 +57,10 @@ export class SingleAnemometerComponent implements OnInit {
   onCreateWind(createdWind: {speed: number, time: Date, anemometer_id:number}){
     this.windsService.createWind(createdWind);
     this.refreshWindObservables();
+  }
+
+  onChangePage(eventPage:any){
+    this.refreshWindObservables(eventPage.pageIndex+1, eventPage.pageSize);
   }
 
   onChange(){}

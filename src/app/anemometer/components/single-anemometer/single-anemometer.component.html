@@ -34,16 +34,24 @@
                             Winds stats on {{ anemometer.name }}
                         </mat-panel-description>
                     </mat-expansion-panel-header>
-                    <table matSort (matSortChange)="sortData($event)">
-                        <tr>
-                        <th mat-sort-header="speed">Speed (kn)</th>
-                        <th mat-sort-header="time">Time</th>
-                        </tr>
-                        <tr *ngFor="let wind of sortedWinds">
-                            <td>{{ wind.speed }}</td>
-                            <td>{{ wind.time | date: 'Y/MM/dd,  HH:mm'}}</td>
-                        </tr>
-                    </table>
+                    <mat-spinner *ngIf="loadingWinds$ | async; else table"></mat-spinner>
+                    <ng-template #table>
+                        <table matSort (matSortChange)="sortData($event)">
+                            <tr>
+                            <th mat-sort-header="speed">Speed (kn)</th>
+                            <th mat-sort-header="time">Time</th>
+                            </tr>
+                            <tr *ngFor="let wind of sortedWinds">
+                                <td>{{ wind.speed }}</td>
+                                <td>{{ wind.time | date: 'Y/MM/dd,  HH:mm'}}</td>
+                            </tr>
+                        </table>
+                        <mat-paginator *ngIf="sortedWinds" [length]="countWinds$ | async"
+                            [pageSize]="sortedWinds.length"
+                            [pageSizeOptions]="[10, 25, 50, 100]"
+                            aria-label="Select page" (page)="onChangePage($event)">
+                        </mat-paginator>
+                    </ng-template>
                     <mat-action-row>
                         <app-wind-add [anemometer_id]="anemometer.id" (createdWind)="onCreateWind($event)"></app-wind-add>
                     </mat-action-row>
@@ -55,10 +63,10 @@
         <mat-spinner *ngIf="loading$ | async; else buttons"></mat-spinner>
         <ng-template #buttons>
             <div class="action-buttons">
-                <button mat-flat-button color="accent" (click)="onChange()">Modifier</button>
-                <button mat-flat-button color="warn" (click)="onDelete()">Supprimer</button>
+                <button mat-flat-button color="accent" (click)="onChange()">Update</button>
+                <button mat-flat-button color="warn" (click)="onDelete()">Delete</button>
             </div>
-            <button mat-flat-button color="primary" (click)="onGoBack()">Retour</button>
+            <button mat-flat-button color="primary" (click)="onGoBack()">Go Back</button>
         </ng-template>
     </mat-card-actions>
   </mat-card>

@@ -63,6 +63,17 @@ export class SingleAnemometerComponent implements OnInit {
     this.refreshWindObservables(eventPage.pageIndex+1, eventPage.pageSize);
   }
 
+  onDeleteWind(id:number){
+    console.log(id)
+    this.anemometer$.pipe(
+      take(1),
+      tap(anemometer =>{
+        this.windsService.deleteWind(id, anemometer.id);
+        this.refreshWindObservables();
+      })
+    ).subscribe();
+  }
+
   onChange(){}
 
   onDelete(){

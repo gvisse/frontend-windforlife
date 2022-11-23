@@ -6,14 +6,14 @@
         <app-wind-add (createdWind)="onCreateWind($event)"></app-wind-add>
     </div>
     <mat-divider></mat-divider>
-    <mat-spinner *ngIf="loading$ | async"></mat-spinner>
-    <ng-container *ngIf="loading$">
+    <mat-spinner *ngIf="loading$ | async; else winds"></mat-spinner>
+    <ng-template #winds>
         <ng-container *ngFor="let wind of winds$ | async">
             <mat-list-item>
-                <app-wind-list-item [wind]="wind"></app-wind-list-item>
+                <app-wind-list-item [wind]="wind" (deletedWind)="onDeleteWind($event)"></app-wind-list-item>
             </mat-list-item>
             <mat-divider></mat-divider>
         </ng-container>
-    </ng-container>
+    </ng-template>
 </mat-list>
 

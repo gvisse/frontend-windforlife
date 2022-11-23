@@ -38,12 +38,18 @@
                     <ng-template #table>
                         <table matSort (matSortChange)="sortData($event)">
                             <tr>
-                            <th mat-sort-header="speed">Speed (kn)</th>
-                            <th mat-sort-header="time">Time</th>
+                                <th mat-sort-header="speed">Speed (kn)</th>
+                                <th mat-sort-header="time">Time</th>
+                                <th></th>
                             </tr>
                             <tr *ngFor="let wind of sortedWinds">
                                 <td>{{ wind.speed }}</td>
                                 <td>{{ wind.time | date: 'Y/MM/dd,  HH:mm'}}</td>
+                                <td>
+                                    <button mat-icon-button color="warn" (click)="onDeleteWind(wind.id)">
+                                        <mat-icon>delete</mat-icon>
+                                    </button>
+                                </td>
                             </tr>
                         </table>
                         <mat-paginator *ngIf="sortedWinds" [length]="countWinds$ | async"

@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 
-import { Observable, map } from 'rxjs';
+import { Observable, map, tap } from 'rxjs';
 import { Wind } from '../../models/wind.model';
 import { WindsService } from '../../services/winds.service';
 
@@ -13,9 +14,10 @@ import { WindsService } from '../../services/winds.service';
 export class WindListComponent implements OnInit {
 
   loading$!: Observable<boolean>;
-  winds$!: Observable<Wind[]>
+  winds$!: Observable<Wind[]>;
 
-  constructor(private windsService: WindsService) { }
+
+  constructor(private windsService: WindsService){ }
 
   ngOnInit(): void {
     this.initObservable();
@@ -29,6 +31,10 @@ export class WindListComponent implements OnInit {
 
   onCreateWind(createdWind: {speed: number, time: Date, anemometer_id:number}){
     this.windsService.createWind(createdWind);
+  }
+
+  onDeleteWind(wind_id:number){
+    this.windsService.deleteWind(wind_id);
   }
 
 }

@@ -54,15 +54,12 @@ export class WindAddComponent implements OnInit {
     this.allAnemometers$ = this.anemometersService.allAnemometers$;
   }
 
-  addWind(){
+  onSubmit(){
     if(this.windForm.invalid){
       return;
     }
-    console.log(this.windForm.value);
-    if(this.anemometer_id){
-      this.createdWind.emit(this.windForm.value)
-    }
-    this.windForm.reset('');
+    this.createdWind.emit(this.windForm.value)
+    this.windForm.reset('')
   }
 
 }

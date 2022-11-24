@@ -71,12 +71,10 @@ export class AnemometersService {
   }
 
   getAllAnemometers(): void{
-    this.setLoadingStatus(true);
     this.http.get<Anemometer[]>(`${environment.apiUrl}/anemometer/?page_size=0`).pipe(
       tap((anemos:any) => {
         this.lastAnemosLoaded = Date.now();
         this._allAnemometers$.next(anemos);
-        this.setLoadingStatus(false);
       })
     ).subscribe();
   }

@@ -1,10 +1,13 @@
 .anemometer-tags{
     padding : 5px;
+    padding-bottom: 0;
+    margin-bottom: 0;
 }
 .anemometer-tags li{
     list-style-type: none;
     display: inline-block;
     margin-left: 10px;
+    margin-bottom: 8px;
 }
 
 .anemometer-tags li:first-of-type{

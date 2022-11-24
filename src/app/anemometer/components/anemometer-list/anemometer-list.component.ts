@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl } from '@angular/forms';
+import { PageEvent } from '@angular/material/paginator';
 import { combineLatest, map, Observable, startWith } from 'rxjs';
 import { AnemometerSearchType } from '../../enums/anemometer-search-type.enum';
 import { Anemometer } from '../../models/anemometer.model';
@@ -14,7 +15,8 @@ import { AnemometersService } from '../../services/anemometers.service';
 export class AnemometerListComponent implements OnInit {
 
   loading$!: Observable<boolean>;
-  anemometers$!: Observable<Anemometer[]>
+  anemometers$!: Observable<Anemometer[]>;
+  countAnemometers$!: Observable<number>;
 
   searchCtrl!: FormControl;
   searchTypeCtrl!: FormControl;
@@ -22,6 +24,14 @@ export class AnemometerListComponent implements OnInit {
     value: AnemometerSearchType,
     label: string
   }[];
+
+  pageEvent!: PageEvent;
+  length!: number;
+  pageSize!: number;
+  pageIndex!: number;
+  pageSizeOptions = [10, 25, 50, 100];
+  showPageSizeOptions = true;
+  showFirstLastButtons = true;
 
   constructor(private anemometersService: AnemometersService,
               private fb: FormBuilder)
@@ -66,6 +76,20 @@ export class AnemometerListComponent implements OnInit {
             .includes(search as string))
         )
     );
+    this.countAnemometers$ = this.anemometersService.countAnemometers$;
   }
 
+  onChangePage(e:PageEvent){
+    this.pageEvent = e;
+    this.length = e.length;
+    this.pageSize = e.pageSize;
+    this.pageIndex = e.pageIndex;
+    this.anemometersService.goToPage({page: e.pageIndex+1, size: e.pageSize});
+  }
+
+  setPageSizeOptions(setPageSizeOptionsInput: string) {
+    if (setPageSizeOptionsInput) {
+      this.pageSizeOptions = setPageSizeOptionsInput.split(',').map(str => +str);
+    }
+  }
 }

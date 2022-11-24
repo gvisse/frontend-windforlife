@@ -27,4 +27,13 @@
             </app-anemometer-list-item>
         </mat-nav-list>
     </ng-template>
+    <mat-paginator *ngIf="anemometers$ | async as anemometers"
+        (page)="onChangePage($event)"
+        [length]="countAnemometers$ | async"
+        [pageSize]="pageSize"
+        [showFirstLastButtons]="showFirstLastButtons"
+        [pageSizeOptions]="showPageSizeOptions ? pageSizeOptions : []"
+        [pageIndex]="pageIndex"
+        aria-label="Select page">
+    </mat-paginator>
 </div>

@@ -52,10 +52,14 @@
                                 </td>
                             </tr>
                         </table>
-                        <mat-paginator *ngIf="sortedWinds" [length]="countWinds$ | async"
-                            [pageSize]="sortedWinds.length"
-                            [pageSizeOptions]="[10, 25, 50, 100]"
-                            aria-label="Select page" (page)="onChangePage($event)">
+                        <mat-paginator
+                            (page)="onChangePage($event)"
+                            [length]="countWinds$ | async"
+                            [pageSize]="pageSize"
+                            [showFirstLastButtons]="showFirstLastButtons"
+                            [pageSizeOptions]="showPageSizeOptions ? pageSizeOptions : []"
+                            [pageIndex]="pageIndex"
+                            aria-label="Select page">
                         </mat-paginator>
                     </ng-template>
                     <mat-action-row>

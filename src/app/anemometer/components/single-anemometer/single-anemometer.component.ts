@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { PageEvent } from '@angular/material/paginator';
 import { Sort } from '@angular/material/sort';
 import { ActivatedRoute, Router } from '@angular/router';
 import { map, Observable, switchMap, take, tap } from 'rxjs';
@@ -25,6 +26,14 @@ export class SingleAnemometerComponent implements OnInit {
 
   panelOpenState = true;
 
+  pageEvent!: PageEvent;
+  length!: number;
+  pageSize!: number;
+  pageIndex!: number;
+  pageSizeOptions = [10, 25, 50, 100];
+  showPageSizeOptions = true;
+  showFirstLastButtons = true;
+
   constructor(private anemometersService: AnemometersService,
               private windsService: WindsService,
               private route: ActivatedRoute,
@@ -32,16 +41,16 @@ export class SingleAnemometerComponent implements OnInit {
 
   ngOnInit(): void {
       this.initObservables();
-  }
-
+    }
+    
   private initObservables() {
-      this.loading$ = this.anemometersService.loading$;
-      this.loadingWinds$ = this.windsService.loading$;
-      this.anemometer$ = this.route.params.pipe(
-        switchMap(params => this.anemometersService.getAnemometerById(+params['id']))
-      );
-      this.refreshWindObservables();
-      this.countWinds$ = this.windsService.countWinds$;
+    this.loading$ = this.anemometersService.loading$;
+    this.loadingWinds$ = this.windsService.loading$;
+    this.anemometer$ = this.route.params.pipe(
+      switchMap(params => this.anemometersService.getAnemometerById(+params['id']))
+    );
+    this.refreshWindObservables();
+    this.countWinds$ = this.windsService.countWinds$;
   }
 
   private refreshWindObservables(page?: number, pageSize?: number){
@@ -59,8 +68,12 @@ export class SingleAnemometerComponent implements OnInit {
     this.refreshWindObservables();
   }
 
-  onChangePage(eventPage:any){
-    this.refreshWindObservables(eventPage.pageIndex+1, eventPage.pageSize);
+  onChangePage(e:PageEvent){
+    this.pageEvent = e;
+    this.length = e.length;
+    this.pageSize = e.pageSize;
+    this.pageIndex = e.pageIndex;
+    this.refreshWindObservables(e.pageIndex+1, e.pageSize);
   }
 
   onDeleteWind(id:number){
@@ -72,8 +85,6 @@ export class SingleAnemometerComponent implements OnInit {
       })
     ).subscribe();
   }
-
-  onChange(){}
 
   onDelete(){
     this.anemometer$.pipe(
@@ -107,6 +118,12 @@ export class SingleAnemometerComponent implements OnInit {
           return 0;
       }
     });
+  }
+
+  setPageSizeOptions(setPageSizeOptionsInput: string) {
+    if (setPageSizeOptionsInput) {
+      this.pageSizeOptions = setPageSizeOptionsInput.split(',').map(str => +str);
+    }
   }
 }
 

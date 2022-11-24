@@ -88,10 +88,31 @@ export class TagsService {
     this.getTags();
   }
 
+  getTagById(id: number): Observable<Tag>{
+    return this.http.get<Tag>(`${environment.apiUrl}/tag/${id}`);
+  }
+
   createTag(name: string): void{
     this.setLoadingStatus(true);
     this.http.post<Tag>(`${environment.apiUrl}/tag/`, {name : name}).pipe(
       tap(() => this.getTags())
+    ).subscribe();
+  }
+
+  updateTag(id: number, name: string){
+    this.tags$.pipe(
+      take(1),
+      map(tags => tags
+          .map(tag => tag.id === id ?
+              {id: tag.id, name: name}:
+              tag
+          )
+      ),
+      tap(updatedTags => this._tags$.next(updatedTags)),
+      switchMap(updatedTags =>
+        this.http.patch(`${environment.apiUrl}/tag/${id}/`,
+        updatedTags.find(tag => tag.id === id))
+      )
     ).subscribe();
   }
 

@@ -54,6 +54,7 @@ export class TagUpdateComponent implements OnInit {
       take(1),
       tap(tag => {
         this.tagsService.updateTag(tag.id, this.tagCtrl.value);
+        this.tagsService.goToPage({page: 1, size:10});
         this.onGoback();
       })
     ).subscribe();

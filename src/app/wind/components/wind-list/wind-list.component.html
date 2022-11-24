@@ -14,6 +14,15 @@
             </mat-list-item>
             <mat-divider></mat-divider>
         </ng-container>
+        <mat-paginator
+            (page)="onChangePage($event)"
+            [length]="countWinds$ | async"
+            [pageSize]="pageSize"
+            [showFirstLastButtons]="showFirstLastButtons"
+            [pageSizeOptions]="showPageSizeOptions ? pageSizeOptions : []"
+            [pageIndex]="pageIndex"
+            aria-label="Select page">
+        </mat-paginator>
     </ng-template>
 </mat-list>
 

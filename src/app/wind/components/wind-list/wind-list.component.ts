@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { PageEvent } from '@angular/material/paginator';
 
 import { Observable, map, tap } from 'rxjs';
 import { Wind } from '../../models/wind.model';
@@ -15,6 +16,15 @@ export class WindListComponent implements OnInit {
 
   loading$!: Observable<boolean>;
   winds$!: Observable<Wind[]>;
+  countWinds$!: Observable<number>;
+
+  pageEvent!: PageEvent;
+  length!: number;
+  pageSize!: number;
+  pageIndex!: number;
+  pageSizeOptions = [10, 25, 50, 100];
+  showPageSizeOptions = true;
+  showFirstLastButtons = true;
 
 
   constructor(private windsService: WindsService){ }
@@ -27,6 +37,7 @@ export class WindListComponent implements OnInit {
   private initObservable(){
     this.loading$ = this.windsService.loading$;
     this.winds$ = this.windsService.winds$;
+    this.countWinds$ = this.windsService.countWinds$;
   }
 
   onCreateWind(createdWind: {speed: number, time: Date, anemometer_id:number}){
@@ -37,4 +48,11 @@ export class WindListComponent implements OnInit {
     this.windsService.deleteWind(wind_id);
   }
 
+  onChangePage(e:PageEvent){
+    this.pageEvent = e;
+    this.length = e.length;
+    this.pageSize = e.pageSize;
+    this.pageIndex = e.pageIndex;
+    this.windsService.goToPage(undefined, {page: e.pageIndex+1, size: e.pageSize});
+  }
 }

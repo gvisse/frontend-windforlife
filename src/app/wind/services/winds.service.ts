@@ -90,4 +90,10 @@ export class WindsService {
         tap(() => this.getWinds(anemometer_id))
     ).subscribe();
   }
+
+  goToPage(anemometer_id: number|undefined, pageEvent: {page: number, size: number}): void{
+    this.setLoadingStatus(true);
+    this.getWinds(anemometer_id, pageEvent.page, pageEvent.size);
+  }
+
 }

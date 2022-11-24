@@ -64,7 +64,6 @@ export class SingleAnemometerComponent implements OnInit {
   }
 
   onDeleteWind(id:number){
-    console.log(id)
     this.anemometer$.pipe(
       take(1),
       tap(anemometer =>{

@@ -130,7 +130,6 @@ export class AnemometerNewComponent implements OnInit {
   add(event: MatChipInputEvent): void {
     if (!this.allowFreeTextAddTag) {
       // only allowed to select from the filtered autocomplete list
-      console.log('allowFreeTextAddTag is false');
       return;
     }
     if (this.matAutocomplete.isOpen) {

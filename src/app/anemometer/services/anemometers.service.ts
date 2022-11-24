@@ -60,7 +60,6 @@ export class AnemometersService {
     const getUrl = this.setUrl([{'page': page}, {'page_size': size}]);
     this.http.get<Anemometer[]>(getUrl).pipe(
       tap((anemometers:any) => {
-        console.log(anemometers);
         this.lastAnemosLoaded = Date.now();
         this._anemometers$.next(anemometers['results']);
         this._countAnemometers$.next(anemometers['count']);

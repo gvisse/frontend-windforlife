@@ -69,11 +69,16 @@ export class SingleAnemometerComponent implements OnInit {
   }
 
   onChangePage(e:PageEvent){
-    this.pageEvent = e;
-    this.length = e.length;
-    this.pageSize = e.pageSize;
-    this.pageIndex = e.pageIndex;
-    this.refreshWindObservables(e.pageIndex+1, e.pageSize);
+    this.anemometer$.pipe(
+      take(1),
+      tap((anemometer:Anemometer) =>{
+        this.pageEvent = e;
+        this.length = e.length;
+        this.pageSize = e.pageSize;
+        this.pageIndex = e.pageIndex;
+        this.windsService.goToPage(anemometer.id, {page: e.pageIndex+1, size: e.pageSize})
+      })
+    ).subscribe();
   }
 
   onDeleteWind(id:number){

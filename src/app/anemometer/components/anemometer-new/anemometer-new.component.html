@@ -50,26 +50,23 @@
                 <mat-panel-title>Tags</mat-panel-title>
                 <mat-panel-description>Select zero or several tags</mat-panel-description>
             </mat-expansion-panel-header>
-            <mat-form-field *ngIf="filteredTags$ | async as filteredTags" appearance="fill">
+            <mat-form-field *ngIf="filteredTags$ | async as filteredTags" appearance="fill" class="tags-form-field">
+                <mat-label>Seleted tags</mat-label>
                 <mat-chip-list #chipList formControlName="tags">
-                    <mat-chip
-                        *ngFor="let tag of chipSelectedTags"
-                        [selectable]=true
-                        [removable]=true
-                        (removed)="removeTag(tag)">
+                    <mat-chip *ngFor="let tag of chipSelectedTags;" (removed)="removeTag(tag)">
                         {{tag.name}}
                         <mat-icon matChipRemove>cancel</mat-icon>
                     </mat-chip>
-                    <input
-                    placeholder="Enter Tag"
-                    #tagInput
-                    [formControl]="tagControl"
-                    [matChipInputFor]="chipList"
-                    [matAutocomplete]="auto"
-                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                    [matChipInputAddOnBlur]=true
-                    (matChipInputTokenEnd)="add($event)">
                 </mat-chip-list>
+                <input
+                placeholder="Enter Tag"
+                #tagInput
+                [formControl]="tagControl"
+                [matChipInputFor]="chipList"
+                [matAutocomplete]="auto"
+                [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                [matChipInputAddOnBlur]=true
+                (matChipInputTokenEnd)="add($event)">
                 <mat-autocomplete #auto="matAutocomplete" (optionSelected)="tagSelected($event)">
                     <mat-option *ngFor="let thisTag of filteredTags | async" [value]="thisTag">
                         {{thisTag}}
@@ -78,8 +75,11 @@
             </mat-form-field>
             <mat-action-row>
                 <button mat-button color="warn" (click)="prevStep()">Previous</button>
-                <button mat-button color="primary" (click)="onSubmit()" [disabled]="anemometerForm.invalid">End</button>
             </mat-action-row>
         </mat-expansion-panel>
     </mat-accordion>
+    <div class="d-flex flex-wrap flex-justify-end actions-buttons">
+        <button mat-flat-button color="warn" (click)="onGoback()">Go back</button>
+        <button mat-flat-button color="primary" (click)="onSubmit()" [disabled]="anemometerForm.invalid">Create anemometer</button>
+    </div>
 </form>

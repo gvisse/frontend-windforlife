@@ -1,1 +1,85 @@
-<p>anemometer-update works!</p>
+<div class="bold-title">
+    <h2>Update anemometer</h2>
+</div>
+<mat-spinner *ngIf="loading$ | async; else form"></mat-spinner>
+<ng-template #form>
+    <form [formGroup]="anemometerForm">
+        <mat-accordion>
+            <mat-expansion-panel [expanded]="step === 0" (opened)="setStep(0)" hideToggle>
+                <mat-expansion-panel-header>
+                    <mat-panel-title>Name</mat-panel-title>
+                    <mat-panel-description>Type anemometer's name</mat-panel-description>
+                </mat-expansion-panel-header>
+                <mat-form-field appearance="fill">
+                    <mat-label>Name</mat-label>
+                    <input matInput placeholder="Name" type="text" formControlName="name">
+                    <mat-error>{{ getFormControlErrorText(anemometerForm.controls['name']) }}</mat-error>
+                </mat-form-field>
+                <mat-action-row>
+                    <button mat-button color="primary" (click)="nextStep()">Next</button>
+                    </mat-action-row>
+            </mat-expansion-panel>
+            <mat-expansion-panel [expanded]="step === 1" (opened)="setStep(1)" hideToggle>
+                <mat-expansion-panel-header>
+                    <mat-panel-title>Coordinates</mat-panel-title>
+                    <mat-panel-description>
+                        Enter Lat., Long, and Alt. coordinates 
+                        <mat-icon>my_location</mat-icon>
+                    </mat-panel-description>
+                </mat-expansion-panel-header>
+                <mat-form-field appearance="fill">
+                    <mat-label>Latitude</mat-label>
+                    <input matInput placeholder="Latitude" type="number" formControlName="latitude">
+                    <mat-error>{{ getFormControlErrorText(anemometerForm.controls['altitude']) }}</mat-error>
+                </mat-form-field>
+                <mat-form-field appearance="fill">
+                    <mat-label>Longitude</mat-label>
+                    <input matInput placeholder="Longitude" type="number" formControlName="longitude">
+                    <mat-error>{{ getFormControlErrorText(anemometerForm.controls['longitude']) }}</mat-error>
+                </mat-form-field>
+                <mat-form-field appearance="fill">
+                    <mat-label>Altitude</mat-label>
+                    <input matInput placeholder="Altitude" type="number" formControlName="altitude">
+                    <mat-error>{{ getFormControlErrorText(anemometerForm.controls['altitude']) }}</mat-error>
+                </mat-form-field>
+                <mat-action-row>
+                    <button mat-button color="warn" (click)="prevStep()">Previous</button>
+                    <button mat-button color="primary" (click)="nextStep()">Next</button>
+                    </mat-action-row>
+            </mat-expansion-panel>
+            <mat-expansion-panel [expanded]="step === 2" (opened)="setStep(2)" hideToggle>
+                <mat-expansion-panel-header>
+                    <mat-panel-title>Tags</mat-panel-title>
+                    <mat-panel-description>Select zero or several tags</mat-panel-description>
+                </mat-expansion-panel-header>
+                <mat-form-field *ngIf="filteredTags$ | async as filteredTags" appearance="fill" class="tags-form-field">
+                    <mat-label>Seleted tags</mat-label>
+                    <mat-chip-list #chipList formControlName="tags">
+                        <mat-chip *ngFor="let tag of chipSelectedTags;" (removed)="removeTag(tag)">
+                            {{tag.name}}
+                            <mat-icon matChipRemove>cancel</mat-icon>
+                        </mat-chip>
+                    </mat-chip-list>
+                    <input
+                    placeholder="Enter Tag"
+                    #tagInput
+                    [formControl]="tagControl"
+                    [matChipInputFor]="chipList"
+                    [matAutocomplete]="auto"
+                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                    [matChipInputAddOnBlur]=true
+                    (matChipInputTokenEnd)="add($event)">
+                    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="tagSelected($event)">
+                        <mat-option *ngFor="let thisTag of filteredTags | async" [value]="thisTag">
+                            {{thisTag}}
+                        </mat-option>
+                    </mat-autocomplete>
+                </mat-form-field>
+                <mat-action-row>
+                    <button mat-button color="warn" (click)="prevStep()">Previous</button>
+                    <button mat-button color="primary" (click)="onSubmit()" [disabled]="anemometerForm.invalid">End</button>
+                </mat-action-row>
+            </mat-expansion-panel>
+        </mat-accordion>
+    </form>
+</ng-template>

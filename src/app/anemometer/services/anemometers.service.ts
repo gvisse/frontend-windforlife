@@ -33,16 +33,16 @@ export class AnemometersService {
 
   private getAnemometers(){
     this.http.get<Anemometer[]>(`${environment.apiUrl}/anemometer/`).pipe(
-      tap(anemometers => {
+      tap((anemometers:any) => {
         this.lastAnemosLoaded = Date.now();
-        this._anemometers$.next((anemometers as any)['results']);
+        this._anemometers$.next(anemometers['results']);
         this.setLoadingStatus(false);
       })
     ).subscribe();
   }
 
   getAllAnemometers(): void{
-    this.http.get<Tag[]>(`${environment.apiUrl}/anemometer/?page_size=0`).pipe(
+    this.http.get<Anemometer[]>(`${environment.apiUrl}/anemometer/?page_size=0`).pipe(
       tap((anemos:any) => {
         this.lastAnemosLoaded = Date.now();
         this._allAnemometers$.next(anemos);
@@ -59,12 +59,7 @@ export class AnemometersService {
   }
 
   getAnemometerById(id: number): Observable<Anemometer> {
-    if (!this.lastAnemosLoaded) {
-      this.getAnemometersFromServeur();
-    }
-    return this.anemometers$.pipe(
-        map(anemometers => anemometers.filter(anemometer => anemometer.id === id)[0])
-    );
+    return this.http.get<Anemometer>(`${environment.apiUrl}/anemometer/${id}`)
   }
 
   deleteAnemometer(id: number): void {
@@ -86,5 +81,27 @@ export class AnemometersService {
     ).subscribe();
   }
 
-  // updateAnemometerTags -> choisir quel tag on ajoute avec un select (multiple) sortant tous les tags disponibles (et déjà assigné à l'anémomètre)
+  updateAnemometer(id: number, formValue: {name: string, tags: Tag[]}){
+    this.anemometers$.pipe(
+      take(1),
+      map(anemometers => anemometers
+          .map(anemometer => anemometer.id === id ?
+              {
+                id : anemometer.id,
+                name: formValue.name,
+                tags: formValue.tags,
+                latitude: anemometer.latitude,
+                longitude: anemometer.longitude,
+                altitude: anemometer.altitude
+              } :
+              anemometer
+          )
+      ),
+      tap(updatedAnemometers => this._anemometers$.next(updatedAnemometers)),
+      switchMap(updatedAnemometers =>
+          this.http.patch(`${environment.apiUrl}/anemometer/${id}/`,
+          updatedAnemometers.find(anemometer => anemometer.id === id))
+      )
+    ).subscribe();
+  }
 }

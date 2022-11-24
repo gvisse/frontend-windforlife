@@ -16,7 +16,7 @@
         </ng-template>
     </ul>
 </div>
-<mat-paginator *ngIf="tags$ | async as anemometers"
+<mat-paginator
         (page)="onChangePage($event)"
         [length]="countTags$ | async"
         [pageSize]="pageSize"

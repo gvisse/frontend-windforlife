@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { PageEvent } from '@angular/material/paginator';
 import { ActivatedRoute } from '@angular/router';
 import { map, Observable } from 'rxjs';
 import { Tag } from '../../models/tag.model';
@@ -14,6 +15,14 @@ export class TagListComponent implements OnInit {
   tags$!: Observable<Tag[]>;
   countTags$!: Observable<number>;
   loading$!: Observable<boolean>;
+
+  pageEvent!: PageEvent;
+  length!: number;
+  pageSize!: number;
+  pageIndex!: number;
+  pageSizeOptions = [10, 25, 50, 100];
+  showPageSizeOptions = true;
+  showFirstLastButtons = true;
 
   constructor(private tagsService: TagsService) { }
 
@@ -36,7 +45,11 @@ export class TagListComponent implements OnInit {
     this.tagsService.createTag(createdTag.name);
   }
 
-  onChangePage(eventPage:any){
-    this.tagsService.goToPage({page: eventPage.pageIndex+1, size: eventPage.pageSize});
+  onChangePage(e:PageEvent){
+    this.pageEvent = e;
+    this.length = e.length;
+    this.pageSize = e.pageSize;
+    this.pageIndex = e.pageIndex;
+    this.tagsService.goToPage({page: e.pageIndex+1, size: e.pageSize});
   }
 }

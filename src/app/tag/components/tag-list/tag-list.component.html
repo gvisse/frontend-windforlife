@@ -16,8 +16,12 @@
         </ng-template>
     </ul>
 </div>
-<mat-paginator *ngIf="tags$ | async as tags" [length]="countTags$ | async"
-    [pageSize]="tags.length"
-    [pageSizeOptions]="[10, 25, 50, 100]"
-    aria-label="Select page" (page)="onChangePage($event)">
-</mat-paginator>
+<mat-paginator *ngIf="tags$ | async as anemometers"
+        (page)="onChangePage($event)"
+        [length]="countTags$ | async"
+        [pageSize]="pageSize"
+        [showFirstLastButtons]="showFirstLastButtons"
+        [pageSizeOptions]="showPageSizeOptions ? pageSizeOptions : []"
+        [pageIndex]="pageIndex"
+        aria-label="Select page">
+    </mat-paginator>

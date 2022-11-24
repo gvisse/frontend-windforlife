@@ -24,6 +24,21 @@ export class AnemometersService {
   get allAnemometers$(): Observable<Anemometer[]>{
     return this._allAnemometers$.asObservable();
   }
+
+  private _countAnemometers$ = new BehaviorSubject<number>(0);
+  get countAnemometers$(): Observable<number>{
+    return this._countAnemometers$.asObservable();
+  }
+
+  private _nextPage$ = new BehaviorSubject<string>('');
+  get nextPage$(): Observable<string>{
+    return this._nextPage$.asObservable();
+  }
+
+  private _previousPage$ = new BehaviorSubject<string>('');
+  get previousPage$(): Observable<string>{
+    return this._previousPage$.asObservable();
+  }
   
   private setLoadingStatus(loading: boolean){
     this._loading$.next(loading);
@@ -31,21 +46,38 @@ export class AnemometersService {
 
   private lastAnemosLoaded = 0;
 
-  private getAnemometers(){
-    this.http.get<Anemometer[]>(`${environment.apiUrl}/anemometer/`).pipe(
+  private setUrl(params: {[key:string]: string|number|undefined}[]): string{
+    let getUrl = `${environment.apiUrl}/anemometer/?`;
+    for(let param of params){
+      for(let key in param){
+        if(typeof param[key] !== 'undefined') getUrl += `&${key}=${param[key]}`
+      }
+    }
+    return getUrl;
+  }
+
+  private getAnemometers(page?: number, size?: number){
+    const getUrl = this.setUrl([{'page': page}, {'page_size': size}]);
+    this.http.get<Anemometer[]>(getUrl).pipe(
       tap((anemometers:any) => {
+        console.log(anemometers);
         this.lastAnemosLoaded = Date.now();
         this._anemometers$.next(anemometers['results']);
+        this._countAnemometers$.next(anemometers['count']);
+        this._nextPage$.next(anemometers['next']);
+        this._previousPage$.next(anemometers['previous']);
         this.setLoadingStatus(false);
       })
     ).subscribe();
   }
 
   getAllAnemometers(): void{
+    this.setLoadingStatus(true);
     this.http.get<Anemometer[]>(`${environment.apiUrl}/anemometer/?page_size=0`).pipe(
       tap((anemos:any) => {
         this.lastAnemosLoaded = Date.now();
         this._allAnemometers$.next(anemos);
+        this.setLoadingStatus(false);
       })
     ).subscribe();
   }
@@ -79,6 +111,11 @@ export class AnemometersService {
     this.http.post<Anemometer>(`${environment.apiUrl}/anemometer/`, formValue).pipe(
       tap(() => this.getAnemometers())
     ).subscribe();
+  }
+
+  goToPage(pageEvent: {page: number, size: number}): void{
+    this.setLoadingStatus(true);
+    this.getAnemometers(pageEvent.page, pageEvent.size);
   }
 
   updateAnemometer(id: number, formValue: {name: string, tags: Tag[]}){

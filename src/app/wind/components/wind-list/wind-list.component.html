@@ -9,9 +9,7 @@
     <mat-spinner *ngIf="loading$ | async; else winds"></mat-spinner>
     <ng-template #winds>
         <ng-container *ngFor="let wind of winds$ | async">
-            <mat-list-item>
-                <app-wind-list-item [wind]="wind" (deletedWind)="onDeleteWind($event)"></app-wind-list-item>
-            </mat-list-item>
+            <app-wind-list-item mat-list-item [wind]="wind" (deletedWind)="onDeleteWind($event)"></app-wind-list-item>
             <mat-divider></mat-divider>
         </ng-container>
         <mat-paginator

@@ -5,7 +5,12 @@
 }
 
 .mat-mdc-card-header{
-    flex-shrink: 0
+    flex-shrink: 0;
+}
+
+.mat-mdc-card-title{
+    font-size: large;
+    line-height: 1.5em;
 }
 
 .mat-mdc-card-content{

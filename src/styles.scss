@@ -114,3 +114,31 @@ a {
 mat-spinner{
   margin: 15px auto;
 }
+
+.anemometer-popup {
+
+  a:not(.tag-name){
+    color: #673ab7;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  .anemometer-tags{
+    padding : 5px;
+    padding-bottom: 0;
+    margin-bottom: 0;
+    margin-top: 0;
+  
+    li{
+      list-style-type: none;
+      display: inline-block;
+      margin-left: 0.5em;
+      font-size: small;
+      margin-bottom: 0.5em;
+    }
+    
+    li:first-of-type{
+      margin-left: 0;
+    }
+  }
+}

@@ -1,0 +1,12 @@
+.map-container {
+    height: 100%;
+}
+
+
+.anemometer-marker {
+    height: 40px;
+    width: 27px;
+    background-image: url(https://api.geoapify.com/v1/icon/?type=material&color=%23ff0000&icon=my_location&scaleFactor=2&apiKey=6208299ff37145eb8fd4a87e70831b14);
+    background-size: contain;
+    cursor: pointer;
+}

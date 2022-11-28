@@ -2,6 +2,7 @@
     <div class="wind-speed-at d-flex flex-item-center flex-justify-between col-6">
         <span>Speed : {{ wind.speed }} kn</span>
         <span>At : {{ wind.time | date: 'dd/MM/yy, à HH:mm' }}</span>
+        <span>Direction : {{ wind.direction }}° / {{wind.cardinal}}</span>
     </div>
     <div class="wind-anemometer d-flex flex-item-center flex-justify-end col-6">
         <a mat-icon-button color="primary"

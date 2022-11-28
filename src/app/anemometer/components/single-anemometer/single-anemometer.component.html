@@ -39,11 +39,13 @@
                         <table matSort (matSortChange)="sortData($event)">
                             <tr>
                                 <th mat-sort-header="speed">Speed (kn)</th>
+                                <th mat-sort-header="direction">Direction</th>
                                 <th mat-sort-header="time">Time</th>
                                 <th></th>
                             </tr>
                             <tr *ngFor="let wind of sortedWinds">
                                 <td>{{ wind.speed }}</td>
+                                <td>{{ wind.direction }} / {{ wind.cardinal }}</td>
                                 <td>{{ wind.time | date: 'Y/MM/dd,  HH:mm'}}</td>
                                 <td>
                                     <button mat-icon-button color="warn" (click)="onDeleteWind(wind.id)">

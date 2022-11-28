@@ -2,7 +2,7 @@
     <h2>New anemometer</h2>
 </div>
 <form [formGroup]="anemometerForm">
-    <mat-accordion>
+    <mat-accordion displayMode="flat">
         <mat-expansion-panel [expanded]="step === 0" (opened)="setStep(0)" hideToggle>
             <mat-expansion-panel-header>
                 <mat-panel-title>Name</mat-panel-title>
@@ -52,12 +52,12 @@
             </mat-expansion-panel-header>
             <mat-form-field *ngIf="filteredTags$ | async as filteredTags" appearance="fill" class="tags-form-field">
                 <mat-label>Seleted tags</mat-label>
-                <mat-chip-list #chipList formControlName="tags">
-                    <mat-chip *ngFor="let tag of chipSelectedTags;" (removed)="removeTag(tag)">
+                <mat-chip-grid #chipList formControlName="tags">
+                    <mat-chip-row *ngFor="let tag of chipSelectedTags;" (removed)="removeTag(tag)">
                         {{tag.name}}
                         <mat-icon matChipRemove>cancel</mat-icon>
-                    </mat-chip>
-                </mat-chip-list>
+                    </mat-chip-row>
+                </mat-chip-grid>
                 <input
                 placeholder="Enter Tag"
                 #tagInput

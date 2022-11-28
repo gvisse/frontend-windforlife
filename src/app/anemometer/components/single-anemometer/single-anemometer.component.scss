@@ -6,7 +6,8 @@ li{
     list-style-type: none;
 }
 
-mat-card{
+/* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version. */
+.mat-mdc-card{
     width: 70%;
     margin: auto;
 }
@@ -19,7 +20,7 @@ table{
     width: 100%
 }
 
-.mat-card-actions{
+.mat-mdc-card-actions{
     display: flex;
     justify-content: center;
     flex-wrap: wrap;

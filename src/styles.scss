@@ -103,10 +103,12 @@ a {
   border-top-color: transparent;
 }
 
-mat-form-field{
-  .mat-form-field-flex{
-    border-radius: 0 !important;
-  }
+.mdc-text-field{
+  border-radius: 0 !important;
+}
+
+.mat-mdc-paginator{
+  background-color: transparent;
 }
 
 mat-spinner{

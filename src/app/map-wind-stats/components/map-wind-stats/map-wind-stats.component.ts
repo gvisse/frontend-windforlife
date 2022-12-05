@@ -9,7 +9,7 @@ import { Tag } from 'src/app/tag/models/tag.model';
 import { WindStatsService } from '../../services/wind-stats.service';
 
 @Component({
-  selector: 'app-home',
+  selector: 'app-map-wind-stats',
   templateUrl: './map-wind-stats.component.html',
   styleUrls: ['./map-wind-stats.component.scss']
 })

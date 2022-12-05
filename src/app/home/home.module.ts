@@ -4,6 +4,7 @@ import { HomeComponent } from './components/home/home.component';
 import { SharedModule } from '../shared/shared.module';
 import { AnemometersService } from '../anemometer/services/anemometers.service';
 import { HomeRoutingModule } from './home-routing.module';
+import { WindStatsService } from './services/wind-stats.service';
 
 
 
@@ -18,6 +19,7 @@ import { HomeRoutingModule } from './home-routing.module';
   ],
   providers:[
     AnemometersService,
+    WindStatsService
   ]
 })
 export class HomeModule { }

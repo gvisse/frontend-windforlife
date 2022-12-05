@@ -1,8 +1,9 @@
-<div class="d-flex flex-wrap col-6">
+<div class="d-flex flex-wrap flex-item-center col-6">
     <a class="tag-name">{{ tag.name | titlecase }}</a>
 </div>
 <div class="d-flex flex-item-center col-6">
     <div class="d-flex flex-auto flex-item-center flex-justify-end">
+        <p>Nb anemometers : {{ tag.anemos__count }}</p>
         <a mat-button color="primary" routerLink="{{tag.id}}/update">Update</a>
         <button mat-button color="warn" (click)="onDelete()">Delete</button>
     </div>

@@ -1,10 +1,12 @@
-import { E } from '@angular/cdk/keycodes';
 import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { Map, Marker, NavigationControl, Popup } from 'maplibre-gl';
-import { Observable, tap } from 'rxjs';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import maplibreGl, {GeoJSONSource, Map, NavigationControl } from 'maplibre-gl';
+import { Observable, tap, map, take } from 'rxjs';
 import { Anemometer } from 'src/app/anemometer/models/anemometer.model';
 import { AnemometersService } from 'src/app/anemometer/services/anemometers.service';
 import { Tag } from 'src/app/tag/models/tag.model';
+import { WindStatsService } from '../../services/wind-stats.service';
 
 @Component({
   selector: 'app-home',
@@ -18,48 +20,160 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   anemometers$!: Observable<Anemometer[]>;
 
-  constructor(private anemometersService: AnemometersService){
+  map!: Map;
+
+  minWind$!: Observable<number>;
+  maxWind$!: Observable<number>;
+  meanWind$!: Observable<number>;
+
+  windStatsForm!: FormGroup;
+
+  constructor(private anemometersService: AnemometersService,
+              private windStatsService: WindStatsService,
+              private fb: FormBuilder)
+  {
 
   }
 
   ngOnInit(){
+    this.initForm();
     this.anemometersService.getAllAnemometers();
-    this.anemometers$ = this.anemometersService.allAnemometers$;
+    this.initObservables();
   }
 
   ngAfterViewInit(){
-    const initialState = {lng: 45.8793252, lat: 6.8786695, zoom: 1};
-
+    const initialState = {lng: -1.5634060, lat: 46.2441246, zoom: 2};
     const apiKey = '6208299ff37145eb8fd4a87e70831b14';
     const mapStyle = 'https://maps.geoapify.com/v1/styles/osm-bright/style.json';
-    const map = new Map({
+    this.map = new Map({
       container: this.mapContainer.nativeElement,
       style: `${mapStyle}?apiKey=${apiKey}`,
       center: [initialState.lng, initialState.lat],
       zoom: initialState.zoom
     });
 
-    map.addControl(new NavigationControl({showCompass: true, showZoom: true, visualizePitch: false}));
+    const mapLoading = this.map;
+    var features:any = [];
     this.anemometers$.subscribe(anemometers => {
-      for(let anemometer of anemometers){
-          var element = this.createElement(27, 40);
-          var markerPopup = new Popup({
-            anchor: 'bottom',
-            offset: [0, -37], // height - shadow
-            className: 'anemometer-popup',
-            focusAfterOpen: false
+        for(let anemometer of anemometers){
+          features.push({
+            type: 'Feature',
+            properties: {
+              title: anemometer.name,
+              description: this.getPopupContent(anemometer)
+            },
+            geometry: {
+              type: 'Point',
+              'coordinates' : [anemometer.longitude, anemometer.latitude]
+            }
           });
-          var popupContent = document.createElement('div');
-          popupContent.classList.add('anemometer-popup')
-          popupContent.innerHTML = this.getPopupContent(anemometer);
-          markerPopup.setDOMContent(popupContent);
-          var marker = new Marker(element, {anchor: 'bottom', offset:[0, 5], draggable:false})
-            .setLngLat([Number(anemometer.longitude), Number(anemometer.latitude)])
-            .setPopup(markerPopup)
-            .addTo(map)
         }
     });
+    mapLoading.on('load', function() {
+      mapLoading.loadImage(
+        'https://api.geoapify.com/v1/icon/?type=material&color=red&size=small&icon=my_location&iconType=material&iconSize=medium&apiKey=6208299ff37145eb8fd4a87e70831b14',
+        function (error, image){
+          if (error) throw error;
+          if(image) mapLoading.addImage('custom-marker', image);
+          mapLoading.addSource('circle', {
+            type: 'geojson',
+            data: {
+              type: 'FeatureCollection',
+              features: [{
+              }]
+            }
+          });
+          mapLoading.addLayer({
+            id: 'circle',
+            type: 'fill',
+            source : 'circle',
+            layout: {},
+            paint: {'fill-color': "#088", 'fill-opacity': 0.6}
+          });
+          mapLoading.addSource('places', {
+            type: 'geojson',
+            data: {
+              type: 'FeatureCollection',
+              features : features
+            }
+          });
+          mapLoading.addLayer({
+            id: 'places',
+            type: 'symbol',
+            source: 'places',
+            layout: {
+              'icon-image': 'custom-marker',
+              'icon-overlap': 'always'
+            }
+          });
+          mapLoading.on('mouseenter', 'places', function(e){
+            mapLoading.getCanvas().style.cursor = 'pointer'
+          });
+          mapLoading.on('mouseleave', 'places', function(e){
+            mapLoading.getCanvas().style.cursor = ''
+          });
+          mapLoading.on('click', 'places', function (e) {
+            if(e.features && e.features[0].geometry.type === 'Point'){
+              mapLoading.flyTo({
+                center: [e.features[0].geometry.coordinates[0], e.features[0].geometry.coordinates[1]],
+                zoom: 5,
+                speed: 0.8,
+                easing: function (t) {
+                  return t;
+                },
+              });
+              var coordinates = e.features[0].geometry.coordinates.slice();
+              if(e.features[0].properties){
+                var description = e.features[0].properties['description'];
+              }
+              while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+                coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+              }
+                
+              new maplibreGl.Popup({
+                anchor: 'bottom',
+                offset: [0, -17], // height - shadow
+                className: 'anemometer-popup',
+                focusAfterOpen: false
+              })
+              .setLngLat(new maplibreGl.LngLat(coordinates[0], coordinates[1]))
+              .setHTML(description)
+              .addTo(mapLoading);
+              }
+          });
+          
+        }
+      );      
+      mapLoading.addControl(new NavigationControl({showCompass: true, showZoom: true, visualizePitch: false}));
+    })
+    this.map = mapLoading;
+  }
 
+  private initForm(){
+    this.windStatsForm = this.fb.group({
+      lng: [null, [Validators.required, Validators.min(-180), Validators.max(180)]],
+      lat: [null, [Validators.required, Validators.min(-90), Validators.max(90)]],
+      radius: [null, [Validators.required]]
+    })
+  }
+
+  private initObservables(){
+    this.minWind$ = this.windStatsService.min$;
+    this.maxWind$ = this.windStatsService.max$;
+    this.meanWind$ = this.windStatsService.mean$;
+    this.anemometers$ = this.anemometersService.allAnemometers$;
+  }
+
+  getFormControlErrorText(ctrl: AbstractControl) {
+    if (ctrl.hasError('required')) {
+      return 'Ce champ est requis';
+    } else if (ctrl.hasError('min')) {
+      return `Merci d'entrer une coordonnée valide (> ${ctrl.errors!['min']['min']})`;
+    } else if (ctrl.hasError('max')) {
+      return `Merci d'entrer une coordonnée valide (< ${ctrl.errors!['max']['max']})`;
+    } else {
+      return 'Ce champ contient une erreur';
+    }
   }
 
   getPopupContent(anemometer:Anemometer): string{
@@ -91,13 +205,50 @@ export class HomeComponent implements OnInit, AfterViewInit {
     return tagsContent;
   }
 
-  createElement(width:number, height:number): HTMLElement{
-    var element = document.createElement('div');
-    element.style.height = `${height}px`;
-    element.style.width = `${width}px`;
-    element.style.backgroundImage = "url(https://api.geoapify.com/v1/icon/?type=material&color=%23ff0000&icon=my_location&scaleFactor=2&apiKey=6208299ff37145eb8fd4a87e70831b14)";
-    element.style.backgroundSize = 'contain';
-    element.style.cursor = 'pointer';
-    return element
+  drawCircle(){
+    if(this.windStatsForm.invalid){
+      return;
+    }
+    var coordinates = {lat: this.windStatsForm.value['lat'], lng: this.windStatsForm.value['lng']}
+    var radius = this.windStatsForm.value['radius']
+    this.windStatsService.getStats(coordinates, radius * 1852).subscribe(() => {
+      const map = this.map;
+      var circleSource = this.map.getSource('circle') as GeoJSONSource;
+      var windStats = this.getWindStatsData();
+      console.log(windStats);
+      var polygon = this.getCircleData(coordinates, radius);
+      if(circleSource){
+        circleSource.setData(polygon);
+        map.getLayer('circle').setPaintProperty('fill-color', "#088");
+        map.getLayer('circle').setPaintProperty('fill-opacity', 0.6);
+        map.panTo([coordinates.lng, coordinates.lat])
+        map.on('click', 'circle', function(e){
+          new maplibreGl.Popup({
+            anchor: 'top',
+            offset: [0, 7]
+          })
+          .setLngLat(e.lngLat)
+          .setHTML(`min: ${windStats.min} kn<br/>max: ${windStats.max} kn<br/>mean: ${windStats.mean} kn`)
+          .addTo(map);
+        });
+      }
+    });
+    // call service to get data (http://localhost:8000/wind-stats?central_point=lat,long&radius=radius) {'min': xxx, 'max': xxx, 'mean': xxx}
+    // store min, max, mean in observable and BehaviorSubject<number>(0)
+    // draw circle and add stats in description of popup
+  }
+
+  private getWindStatsData(){
+    var min = 0; var max = 0; var mean = 0;
+    this.windStatsService.min$.subscribe(data => { min = data});
+    this.windStatsService.max$.subscribe(data => { max = data});
+    this.windStatsService.mean$.subscribe(data => { mean = data});
+    return {min: min,max: max,mean: mean}
+  }
+
+  private getCircleData(coordinates : {lng: number, lat :number}, radius: number){
+    const circleToPolygon = require("circle-to-polygon");
+    var polygon = circleToPolygon([coordinates.lng, coordinates.lat], radius * 1852, { numberOfEdges: 2048});
+    return polygon
   }
 }

@@ -10,10 +10,10 @@ import { WindStatsService } from '../../services/wind-stats.service';
 
 @Component({
   selector: 'app-home',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss']
+  templateUrl: './map-wind-stats.component.html',
+  styleUrls: ['./map-wind-stats.component.scss']
 })
-export class HomeComponent implements OnInit, AfterViewInit {
+export class MapWindStatsComponent implements OnInit, AfterViewInit {
 
   @ViewChild('map')
   private mapContainer!: ElementRef<HTMLElement>;

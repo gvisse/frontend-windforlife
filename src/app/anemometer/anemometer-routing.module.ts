@@ -4,10 +4,11 @@ import { AnemometerListComponent } from './components/anemometer-list/anemometer
 import { SingleAnemometerComponent } from './components/single-anemometer/single-anemometer.component';
 import { AnemometerNewComponent } from './components/anemometer-new/anemometer-new.component';
 import { AnemometerUpdateComponent } from './components/anemometer-update/anemometer-update.component';
+import { AuthGuard } from '../core/guards/auth.guards';
 
 const routes: Routes = [
-  { path: 'new', component: AnemometerNewComponent},
-  { path: ':id/update', component: AnemometerUpdateComponent },
+  { path: 'new', component: AnemometerNewComponent , canActivate: [AuthGuard]},
+  { path: ':id/update', component: AnemometerUpdateComponent, canActivate: [AuthGuard]},
   { path: ':id', component: SingleAnemometerComponent },
   { path: '', component: AnemometerListComponent }
 ];

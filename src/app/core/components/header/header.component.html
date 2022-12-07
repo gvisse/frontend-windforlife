@@ -1,4 +1,4 @@
-<mat-toolbar color="primary">
+<mat-toolbar class="d-flex flex-item-center" color="primary">
     <a>WindForLife</a>
     <ul>
         <li>
@@ -25,4 +25,13 @@
             <button mat-button routerLink="/map">Map</button>
         </li>
     </ul>
+    <div class="login">
+        <ng-container *ngIf="user">
+            <button mat-button [matMenuTriggerFor]="menuUser">{{user.fullname | titlecase}}</button>
+            <mat-menu #menuUser="matMenu">
+                <button mat-menu-item (click)="logout()">Logout</button>
+            </mat-menu>
+        </ng-container>
+        <button mat-button *ngIf="!user" routerLink="/login/">Log In</button>
+    </div>
 </mat-toolbar>

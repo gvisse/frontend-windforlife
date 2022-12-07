@@ -6,6 +6,8 @@ li {
     display: inline-block;
 }
 
-li > button{
+li > button, .login button{
     color : white
 }
+
+.login{margin-left: auto;}

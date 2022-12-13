@@ -41,13 +41,13 @@
                                 <th mat-sort-header="speed">Speed (kn)</th>
                                 <th mat-sort-header="direction">Direction</th>
                                 <th mat-sort-header="time">Time</th>
-                                <th></th>
+                                <th *ngIf="authService.isAuthenticated()"></th>
                             </tr>
                             <tr *ngFor="let wind of sortedWinds">
                                 <td>{{ wind.speed }}</td>
                                 <td>{{ wind.direction }} / {{ wind.cardinal }}</td>
                                 <td>{{ wind.time | date: 'Y/MM/dd,  HH:mm'}}</td>
-                                <td>
+                                <td *ngIf="authService.isAuthenticated()">
                                     <button mat-icon-button color="warn" (click)="onDeleteWind(wind.id)">
                                         <mat-icon>delete</mat-icon>
                                     </button>
@@ -64,7 +64,7 @@
                             aria-label="Select page">
                         </mat-paginator>
                     </ng-template>
-                    <mat-action-row>
+                    <mat-action-row *ngIf="authService.isAuthenticated()">
                         <app-wind-add [anemometer_id]="anemometer.id" (createdWind)="onCreateWind($event)"></app-wind-add>
                     </mat-action-row>
                 </mat-expansion-panel>
@@ -74,7 +74,7 @@
     <mat-card-actions>
         <mat-spinner *ngIf="loading$ | async; else buttons"></mat-spinner>
         <ng-template #buttons>
-            <div class="action-buttons">
+            <div class="action-buttons" *ngIf="authService.isAuthenticated()">
                 <a mat-flat-button color="accent" routerLink="update">Update</a>
                 <button mat-flat-button color="warn" (click)="onDelete()">Delete</button>
             </div>

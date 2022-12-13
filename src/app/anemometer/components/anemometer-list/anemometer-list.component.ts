@@ -2,6 +2,8 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl } from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
 import { combineLatest, map, Observable, startWith } from 'rxjs';
+import { User } from 'src/app/auth/models/user-credentials.model';
+import { AuthService } from 'src/app/core/services/auth.service';
 import { AnemometerSearchType } from '../../enums/anemometer-search-type.enum';
 import { Anemometer } from '../../models/anemometer.model';
 import { AnemometersService } from '../../services/anemometers.service';
@@ -34,7 +36,8 @@ export class AnemometerListComponent implements OnInit {
   showFirstLastButtons = true;
 
   constructor(private anemometersService: AnemometersService,
-              private fb: FormBuilder)
+              private fb: FormBuilder,
+              public authService: AuthService)
   {
   }
 

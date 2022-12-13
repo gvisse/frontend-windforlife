@@ -3,9 +3,12 @@ export class UserCredentials{
     password!: string;
 }
 
-export class LoggedInUser{
+export class User{
     id!: number;
     username!: string;
-    token!: string;
-    fullname!: string
+    email!: string;
+    is_superuser!: boolean;
+    is_staff!: boolean;
+    first_name?: string;
+    last_name?: string;
 }

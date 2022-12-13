@@ -22,7 +22,22 @@
     width: 100%;
   }
   
-  button {
-    display: block;
-    margin: 20px auto;
+  .logon-card {
+    margin: 50px auto 20px;
+
+    mat-card-content{
+      mat-form-field:first-child{
+        margin-top: 10px;
+      }
+    }
+  }
+  
+
+  .alert-warning {
+    color: #e53935;
+    background-color: rgba(229,57,53,.15);
+  }
+  
+  .button-warning{
+    color: #e53935;
   }

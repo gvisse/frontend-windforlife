@@ -1,6 +1,6 @@
 <div class="d-flex flex-wrap flex-justify-between flex-item-center">
     <div class="actions-buttons">
-        <a mat-flat-button color="primary" routerLink="new">Add anemometer</a>
+        <a mat-flat-button color="primary" routerLink="new" *ngIf="authService.isAuthenticated()">Add anemometer</a>
     </div>
     <div class="search">
         <mat-form-field appearance="fill">

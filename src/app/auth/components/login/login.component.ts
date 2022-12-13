@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { filter, Subject, takeUntil } from 'rxjs';
+import { finalize } from 'rxjs';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { UserCredentials } from '../../models/user-credentials.model';
 
@@ -12,10 +13,17 @@ import { UserCredentials } from '../../models/user-credentials.model';
 })
 export class LoginComponent implements OnInit {
 
+  loading!: boolean;
+
+  message!: {message : string, label: string, color: string, icon: string};
+
   loginForm!: FormGroup;
   loginValid = true;
 
   private readonly returnUrl: string;
+
+  @ViewChild('password') pwd!: ElementRef;
+  togglePwd = false;
 
   constructor(private authService : AuthService,
               private fb: FormBuilder,
@@ -30,7 +38,42 @@ export class LoginComponent implements OnInit {
   }
 
   logInUser(user: UserCredentials): void {
-    this.authService.login({username: user.username, password:user.password}).subscribe();
+    this.loading = true;
+    this.authService.logon(user)
+      .pipe(finalize(() => this.loading = false))
+      .subscribe({
+        next: (data) => {
+          if (data.token) {
+            this.router.navigate(['/anemometer/']);
+          }
+        },
+        error: (error) => {
+          if (error instanceof HttpErrorResponse && error.status === 400) {
+            const message =  error.error.non_field_errors[0];
+            this.message = {
+              message, label: '',
+              color: 'red', icon: 'error'
+            };
+          } else {
+            throw error;
+          }
+        }
+      }
+    );
+   }
+
+  showPassword() {
+    this.pwd.nativeElement.type = 'text';
+    this.togglePwd = ! this.togglePwd;
+  }
+
+  hidePassword() {
+    this.pwd.nativeElement.type = 'password';
+    this.togglePwd = ! this.togglePwd;
+  }
+
+   closeAlert(){
+    this.message = {message: '', label: '', color: '', icon: ''};
    }
 
   onLogin() {
@@ -38,7 +81,6 @@ export class LoginComponent implements OnInit {
       return;
     }
     this.logInUser({username: this.loginForm.value['username'], password:this.loginForm.value['password']})
-    this.router.navigateByUrl('/anemometer');
   }
 
   getFormControlErrorText(ctrl: AbstractControl) {

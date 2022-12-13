@@ -3,6 +3,7 @@ import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
 
 import { Observable, map, tap } from 'rxjs';
+import { AuthService } from 'src/app/core/services/auth.service';
 import { Wind } from '../../models/wind.model';
 import { WindsService } from '../../services/winds.service';
 
@@ -27,7 +28,7 @@ export class WindListComponent implements OnInit {
   showFirstLastButtons = true;
 
 
-  constructor(private windsService: WindsService){ }
+  constructor(private windsService: WindsService, public authService: AuthService){ }
 
   ngOnInit(): void {
     this.initObservable();

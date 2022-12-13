@@ -10,14 +10,14 @@
         <li>
             <button mat-button [matMenuTriggerFor]="menuAnemos">Anemometers</button>
             <mat-menu #menuAnemos="matMenu">
-                <button mat-menu-item routerLink="/anemometer/new">New</button>
+                <button mat-menu-item routerLink="/anemometer/new" *ngIf="authService.isAuthenticated()">New</button>
                 <button mat-menu-item routerLink="/anemometer">List</button>
             </mat-menu>
         </li>
         <li>
             <button mat-button [matMenuTriggerFor]="menuWinds">Winds</button>
             <mat-menu #menuWinds="matMenu">
-                <button mat-menu-item routerLink="/wind/new">New</button>
+                <button mat-menu-item routerLink="/wind/new" *ngIf="authService.isAuthenticated()">New</button>
                 <button mat-menu-item routerLink="/wind">List</button>
             </mat-menu>
         </li>
@@ -26,12 +26,18 @@
         </li>
     </ul>
     <div class="login">
-        <ng-container *ngIf="user">
-            <button mat-button [matMenuTriggerFor]="menuUser">{{user.fullname | titlecase}}</button>
-            <mat-menu #menuUser="matMenu">
-                <button mat-menu-item (click)="logout()">Logout</button>
-            </mat-menu>
-        </ng-container>
-        <button mat-button *ngIf="!user" routerLink="/login/">Log In</button>
+        <button mat-button [matMenuTriggerFor]="authent">
+            <mat-divider [vertical]="true"></mat-divider>
+            <mat-icon style="position: relative; left: -6px;">{{authService.isAuthenticated() ? 'person_pin' : 'more_vert' }}</mat-icon>
+            <span *ngIf="authService.isAuthenticated()">{{getUser()}}</span>
+          </button>
+          <!--  -->
+          <!-- menu principal -->
+          <mat-menu #authent="matMenu" xPosition="before">
+            <button mat-menu-item (click)="go('/login', authService.isAuthenticated())">
+              <mat-icon *ngIf="authService.isAuthenticated()">power_settings_new</mat-icon>
+              {{authService.isAuthenticated() ? 'Déconnexion' : 'Connexion'}}
+            </button>
+          </mat-menu>
     </div>
 </mat-toolbar>

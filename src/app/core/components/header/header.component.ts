@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { LoggedInUser } from 'src/app/auth/models/user-credentials.model';
+import { User } from 'src/app/auth/models/user-credentials.model';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
@@ -10,16 +10,23 @@ import { AuthService } from '../../services/auth.service';
 })
 export class HeaderComponent implements OnInit {
 
-  user!: LoggedInUser|null;
+  user?: User;
 
-  constructor(private authService: AuthService) {
-    this.authService.user.subscribe(x => {this.user = x})
-   }
-
+  constructor(private router: Router, public authService: AuthService) {
+  }
+  
   ngOnInit(): void {
+    this.authService.userActivate$.subscribe((user) => this.user = user);
   }
 
-  logout(){
-    this.authService.logout()
+  getUser() {
+   return `${this.authService?.getUser()?.first_name} ${this.authService?.getUser()?.last_name}`;
+  }
+
+  go(url: string, logout = false) {
+    if (logout) {
+      this.authService.logout();
+    }
+    this.router.navigate([url]);
   }
 }

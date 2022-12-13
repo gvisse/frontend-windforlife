@@ -13,11 +13,11 @@ export class AuthInterceptor implements HttpInterceptor {
  constructor() {}
 
  intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-   const userData = JSON.parse(localStorage.getItem('userData') || '{}');
-   if (userData.token) {
+   const token = localStorage.getItem('token') || '';
+   if (token) {
      request = request.clone({
        setHeaders: {
-           Authorization: `Token ${userData.token}`
+           Authorization: `Token ${token}`
        }
      });
    }

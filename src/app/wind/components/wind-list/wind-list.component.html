@@ -3,13 +3,13 @@
         <div class="bold-title">
             <h2>Winds</h2>
         </div>
-        <app-wind-add (createdWind)="onCreateWind($event)"></app-wind-add>
+        <app-wind-add *ngIf="authService.isAuthenticated()" (createdWind)="onCreateWind($event)"></app-wind-add>
     </div>
     <mat-divider></mat-divider>
     <mat-spinner *ngIf="loading$ | async; else winds"></mat-spinner>
     <ng-template #winds>
         <ng-container *ngFor="let wind of winds$ | async">
-            <app-wind-list-item mat-list-item [wind]="wind" (deletedWind)="onDeleteWind($event)"></app-wind-list-item>
+            <app-wind-list-item mat-list-item [wind]="wind" [canDelete]="authService.isAuthenticated()" (deletedWind)="onDeleteWind($event)"></app-wind-list-item>
             <mat-divider></mat-divider>
         </ng-container>
         <mat-paginator

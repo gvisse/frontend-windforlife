@@ -9,6 +9,7 @@ import { Wind } from '../../models/wind.model';
 export class WindListItemComponent implements OnInit {
 
   @Input() wind!: Wind;
+  @Input() canDelete!: boolean;
   @Output() deletedWind = new EventEmitter<number>();
 
   constructor() { }

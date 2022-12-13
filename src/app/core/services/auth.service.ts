@@ -1,53 +1,105 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
-import { BehaviorSubject, map, Observable } from 'rxjs';
-import { LoggedInUser } from 'src/app/auth/models/user-credentials.model';
+import { JwtHelperService } from '@auth0/angular-jwt';
+import { map, Observable, ReplaySubject } from 'rxjs';
+import { User, UserCredentials } from 'src/app/auth/models/user-credentials.model';
 import { environment } from 'src/environments/environment';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class AuthService {
+  private user?: User;
+  private url_login = `${environment.apiUrl}/login/`;
+  private userSource = new ReplaySubject<User>(1);
+  userActivate$ = this.userSource.asObservable();
 
-  private _userSubject$!: BehaviorSubject<LoggedInUser|null>;
-  public user!: Observable<LoggedInUser|null>;
-
-  constructor(private http:HttpClient, private router: Router){
-    this._userSubject$ = new BehaviorSubject(JSON.parse(localStorage.getItem('user')|| '{}'));
-    this.user = this._userSubject$.asObservable();
+  constructor(private http: HttpClient,
+              private jwtService: JwtHelperService) {
+    // this.sendUser();
   }
-
-  get userValue(): LoggedInUser|null{
-    return this._userSubject$.value;
+  /**
+   * Authentification /api-token-auth/
+   * @param {UserCredentials} user : l'utilisateur a connecté
+   * @return any dont token
+   */ 
+  logon(user: UserCredentials): Observable<any> {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json', Accept: 'application/json'
+    });
+    return this.http
+      .post(this.url_login, { username: user.username, password: user.password }, {headers})
+      .pipe(map(dataJwt => this._authenticated(dataJwt)));
   }
-
-  private _authSub$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-  get isAuthenticated$(): Observable<boolean>{
-    return this._authSub$.asObservable();
-  }
-
-  private _token$: BehaviorSubject<string> = new BehaviorSubject<string>('');
-  get getToken$(): Observable<string>{
-    return this._token$.asObservable();
-  }
-
-  login(user : {username: string, password: string}): Observable<LoggedInUser>{
-    return this.http.post<LoggedInUser>(
-      `${environment.apiUrl}/login/`,
-      {username: user.username, password: user.password}
-    ).pipe(map(user => {
-      // store user details and jwt token in local storage to keep user logged in between page refreshes
-      localStorage.setItem('userData', JSON.stringify(user));
-      this._userSubject$.next(user);
-      return user;
-  }));
-  }
-
-  logout(){
+  /**
+   Déconnexion, on supprime tout ce qui est relatif au connecté et son 
+   token 
+  */
+  logout() {
+    localStorage.removeItem('token');
     localStorage.removeItem('user');
-    this._userSubject$.next(null);
-    this.router.navigate(['/login/']);
   }
 
+  isAuthenticated() {
+    if(!this.isTokenExpired()){
+      if(this.isCloseToExpiring(this.getTokenExpiredDate())){
+        this.refreshToken().subscribe();
+      }
+      return true;
+    }
+    else{
+      if(this.getToken()){
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+      }
+      return false;
+    }
+  }
+
+  isCloseToExpiring(expiration_date: Date | null){
+    if(expiration_date){
+      return new Date(new Date().getTime() + 5 * 60000) >= expiration_date;
+    } else return; 
+  }
+
+  isTokenExpired() {
+    return this.jwtService.isTokenExpired();
+  }
+
+  getTokenExpiredDate() {
+    return this.jwtService.getTokenExpirationDate();
+  }
+
+  getToken() {
+    return localStorage.getItem('token') || '';
+  }
+
+  getUser(): User{
+    return JSON.parse(localStorage.getItem('user') || '');
+  }
+
+  refreshToken(): Observable<any>{
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json', Accept: 'application/json'
+    });
+    return this.http.post(`${environment.apiUrl}/token/refresh/`, {'token': this.getToken()}, {headers})
+      .pipe(
+        map((token: any) => localStorage.setItem("token", token['token']))
+      );
+  }
+
+  sendUser() {
+    this.user = this.getUser();
+    this.userSource.next(this.user);
+  }
+
+  /**
+   * Stockage du token et de quelques informations user
+   * @param data
+   * @private
+   */
+  private _authenticated(data: any): User {
+    localStorage.setItem('token', data.token);
+    localStorage.setItem('user', JSON.stringify(data.user));
+    this.userSource.next(data.user as User);
+    return data;
+  }
 }

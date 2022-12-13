@@ -21,6 +21,20 @@ a {
   align-items: center !important;
 }
 
+.flex-item-end{
+  align-items: end !important;
+}
+
+.flex-column{
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+.flex-row{
+  display: flex !important;
+  flex-direction: row !important;
+}
+
 .flex-auto{
   flex: auto !important;
 }
@@ -31,6 +45,10 @@ a {
 
 .flex-wrap{
   flex-wrap: wrap !important;
+}
+
+.gap-20{
+  gap: 20px;
 }
 
 .flex-justify-center{

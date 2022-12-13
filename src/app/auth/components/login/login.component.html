@@ -1,23 +1,41 @@
-<mat-card>
-  <mat-card-content>
-    <form [formGroup]="loginForm">
-      <h2>Log In</h2>
-      <mat-error *ngIf="!loginValid">
-        The username and password were not recognized
-      </mat-error>
+<form [formGroup]="loginForm" class="flex-column flex-item-center">
+  <mat-card class="alert-warning" *ngIf="message && message.message" >
+    <mat-card-content  class="flex-row">
+      {{message.message}}
+      <button mat-icon-button class="button-warning" fxFlex fxLayoutAlign="end" (click)="closeAlert()"><mat-icon>close</mat-icon></button>
+    </mat-card-content>
+  </mat-card>
+  <mat-card class="logon-card d-flex">
+    <mat-card-title class="d-flex flex-justify-center">Log in</mat-card-title>
+    <mat-card-subtitle><mat-divider></mat-divider></mat-card-subtitle>
+    <mat-card-content class="flex-column">
       <mat-form-field>
-        <input matInput placeholder="Username" formControlName="username" required>
-        <mat-error>
-          Please provide a valid username
-        </mat-error>
+        <mat-icon matPrefix>person</mat-icon>
+        <mat-label>Username</mat-label>
+          <input matInput placeholder="Username"
+            formControlName="username"
+            type="text"
+            required>
       </mat-form-field>
       <mat-form-field>
-        <input matInput type="password" placeholder="Password" formControlName="password" required>
-        <mat-error>
-          Please provide a valid password
-        </mat-error>
+        <mat-icon matPrefix>lock</mat-icon>
+        <mat-label>Password</mat-label>
+        <input #password matInput placeholder="Password"
+               type="password" required
+               formControlName="password">
+        <button *ngIf="!togglePwd"
+                matTooltip="show the password"
+                matSuffix (click)="showPassword()"
+                mat-icon-button><mat-icon>visibility</mat-icon></button>
+        <button *ngIf="togglePwd"
+                matTooltip="hide the password"
+                matSuffix (click)="hidePassword()"
+                mat-icon-button><mat-icon>visibility_off</mat-icon></button>
       </mat-form-field>
+    </mat-card-content>
+    <mat-card-actions class="flex-column">
+      <mat-progress-bar *ngIf="loading" [mode]="'indeterminate'"></mat-progress-bar>
       <button type="button" mat-raised-button color="primary" [disabled]="!loginForm.valid" (click)="onLogin()">Login</button>
-    </form>
-  </mat-card-content>
-</mat-card>
+    </mat-card-actions>
+  </mat-card>
+</form>

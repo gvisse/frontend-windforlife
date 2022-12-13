@@ -11,7 +11,7 @@
             matTooltipPosition="left">
             <mat-icon>visibility</mat-icon>
         </a>
-        <button mat-icon-button color="warn" (click)="onDeleteWind()">
+        <button *ngIf="canDelete" mat-icon-button color="warn" (click)="onDeleteWind()">
             <mat-icon>delete</mat-icon>
         </button>
     </div>

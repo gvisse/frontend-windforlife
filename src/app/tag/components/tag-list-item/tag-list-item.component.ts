@@ -9,6 +9,7 @@ import { Tag } from '../../models/tag.model';
 export class TagListItemComponent implements OnInit {
 
   @Input() tag!: Tag;
+  @Input() canChange!: boolean;
   @Output() deletedTag = new EventEmitter<{id :number}>();
 
   constructor() { }

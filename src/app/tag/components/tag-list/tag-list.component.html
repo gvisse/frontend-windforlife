@@ -9,7 +9,7 @@
             <ng-container *ngIf="tags$ | async as tags">
                 <li class="box-row" *ngFor="let tag of tags">
                     <app-tag-list-item
-                        [tag]="tag" class="d-flex flex-item-center" (deletedTag)="onDeleteTag($event)">
+                        [tag]="tag" class="d-flex flex-item-center" (canChange)="authService.isAuthenticated()" (deletedTag)="onDeleteTag($event)">
                     </app-tag-list-item>
                 </li>
             </ng-container>

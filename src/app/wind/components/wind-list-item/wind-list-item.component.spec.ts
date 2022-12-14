@@ -59,5 +59,20 @@ describe('WindListItemComponent', () => {
     const expectedDirection = expectedWind.direction;
     const expectedCardinal = expectedWind.cardinal;
     expect(windEl.textContent).toContain(`${expectedDirection}° / ${expectedCardinal}`);
+  });
+
+  it('should display show anemometer link', () => {
+    expect(windEl.querySelector('a')).toBeTruthy();
   })
+
+  it('should display delete button', () => {
+    expect(windEl.querySelector('button')).toBeTruthy();
+  });
+
+  it('should not display delete button' , () => {
+    component.canDelete = false;
+    fixture.detectChanges();
+    expect(windEl.querySelector('button')).toBeFalsy();
+  });
+  
 });

@@ -1,8 +1,7 @@
 import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
-import maplibreGl, {GeoJSONSource, Map, NavigationControl } from 'maplibre-gl';
-import { Observable, tap, map, take } from 'rxjs';
+import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import maplibreGl, {GeoJSONSource, Map, NavigationControl, Popup } from 'maplibre-gl';
+import { Observable } from 'rxjs';
 import { Anemometer } from 'src/app/anemometer/models/anemometer.model';
 import { AnemometersService } from 'src/app/anemometer/services/anemometers.service';
 import { Tag } from 'src/app/tag/models/tag.model';
@@ -26,6 +25,8 @@ export class MapWindStatsComponent implements OnInit, AfterViewInit {
   maxWind$!: Observable<number>;
   meanWind$!: Observable<number>;
 
+  popup!: Popup;
+
   windStatsForm!: FormGroup;
 
   constructor(private anemometersService: AnemometersService,
@@ -39,6 +40,7 @@ export class MapWindStatsComponent implements OnInit, AfterViewInit {
     this.initForm();
     this.anemometersService.getAllAnemometers();
     this.initObservables();
+    this.popup = new maplibreGl.Popup({anchor: 'top',offset: [0, 7]})
   }
 
   ngAfterViewInit(){
@@ -215,28 +217,30 @@ export class MapWindStatsComponent implements OnInit, AfterViewInit {
       const map = this.map;
       var circleSource = this.map.getSource('circle') as GeoJSONSource;
       var windStats = this.getWindStatsData();
-      console.log(windStats);
+      const popup = this.popup
+      function addPopup(e:any){
+        // setDOMContent(document.createElement('div'))...
+         popup.setLngLat(e.lngLat).setHTML(
+          `min: ${windStats.min} kn<br/>
+          max: ${windStats.max} kn<br/>
+          mean: ${windStats.mean} kn`)
+        .addTo(map);
+      }
+
       var polygon = this.getCircleData(coordinates, radius);
       if(circleSource){
         circleSource.setData(polygon);
         map.getLayer('circle').setPaintProperty('fill-color', "#088");
         map.getLayer('circle').setPaintProperty('fill-opacity', 0.6);
         map.panTo([coordinates.lng, coordinates.lat])
-        map.on('click', 'circle', function(e){
-          new maplibreGl.Popup({
-            anchor: 'top',
-            offset: [0, 7]
-          })
-          .setLngLat(e.lngLat)
-          .setHTML(`min: ${windStats.min} kn<br/>max: ${windStats.max} kn<br/>mean: ${windStats.mean} kn`)
-          .addTo(map);
-        });
+        map.on('click', 'circle', addPopup);
       }
     });
     // call service to get data (http://localhost:8000/wind-stats?central_point=lat,long&radius=radius) {'min': xxx, 'max': xxx, 'mean': xxx}
     // store min, max, mean in observable and BehaviorSubject<number>(0)
     // draw circle and add stats in description of popup
   }
+
 
   private getWindStatsData(){
     var min = 0; var max = 0; var mean = 0;

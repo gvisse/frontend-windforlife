@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { Observable } from 'rxjs';
+import { AuthService } from 'src/app/core/services/auth.service';
 import { Tag } from '../../models/tag.model';
 import { TagsService } from '../../services/tags.service';
 
@@ -23,7 +24,7 @@ export class TagListComponent implements OnInit {
   showPageSizeOptions = true;
   showFirstLastButtons = true;
 
-  constructor(private tagsService: TagsService) { }
+  constructor(private tagsService: TagsService, public authService: AuthService) { }
 
   ngOnInit(): void {
     this.initObservable();

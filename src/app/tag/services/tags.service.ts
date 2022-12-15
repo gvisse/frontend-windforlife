@@ -7,6 +7,9 @@ import { environment } from '../../../environments/environment';
 
 @Injectable()
 export class TagsService {
+
+  apiUrl: string = environment.apiUrl;
+  
   constructor(private http: HttpClient){}
     
   private _loading$ = new BehaviorSubject<boolean>(false);

@@ -127,7 +127,7 @@ export class TagsService {
 
   deleteTag(id: number): void {
     this.setLoadingStatus(true);
-    this.http.delete(`${environment.apiUrl}/tag/${id}`).pipe(
+    this.http.delete(`${environment.apiUrl}/tag/${id}/`).pipe(
         tap(() => this.getTags())
     ).subscribe();
   }

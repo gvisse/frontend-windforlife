@@ -28,7 +28,7 @@ export class TagListComponent implements OnInit {
 
   ngOnInit(): void {
     this.initObservable();
-    this.tagsService.getTagsFromServeur();
+    this.tagsService.getTagsFromServer();
   }
 
   private initObservable(){
@@ -42,7 +42,7 @@ export class TagListComponent implements OnInit {
   }
 
   onCreateTag(createdTag: {name: string}){
-    this.tagsService.createTag(createdTag.name);
+    this.tagsService.createTag(createdTag.name).subscribe();
   }
 
   onChangePage(e:PageEvent){

@@ -9,7 +9,7 @@ import { environment } from '../../../environments/environment';
 export class TagsService {
 
   apiUrl: string = environment.apiUrl;
-  
+
   constructor(private http: HttpClient){}
     
   private _loading$ = new BehaviorSubject<boolean>(false);
@@ -83,7 +83,7 @@ export class TagsService {
     ).subscribe();
   }
 
-  getTagsFromServeur(): void{
+  getTagsFromServer(): void{
     if (Date.now() - this.lastTagsLoaded <= 300000) {
       return;
     }
@@ -95,11 +95,11 @@ export class TagsService {
     return this.http.get<Tag>(`${environment.apiUrl}/tag/${id}`);
   }
 
-  createTag(name: string): void{
+  createTag(name: string): Observable<Tag>{
     this.setLoadingStatus(true);
-    this.http.post<Tag>(`${environment.apiUrl}/tag/`, {name : name}).pipe(
+    return this.http.post<Tag>(`${environment.apiUrl}/tag/`, {name : name}).pipe(
       tap(() => this.getTags())
-    ).subscribe();
+    );
   }
 
   updateTag(id: number, name: string){

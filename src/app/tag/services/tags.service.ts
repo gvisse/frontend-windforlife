@@ -98,7 +98,7 @@ export class TagsService {
   }
 
   getTagById(id: number): Observable<Tag>{
-    return this.http.get<Tag>(`${environment.apiUrl}/tag/${id}`);
+    return this.http.get<Tag>(`${environment.apiUrl}/tag/${id}/`);
   }
 
   createTag(name: string): Observable<Tag>{

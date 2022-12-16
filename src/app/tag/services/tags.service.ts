@@ -49,12 +49,18 @@ export class TagsService {
   private lastTagsLoaded = 0;
 
   private setUrl(params: {[key:string]: string|number|undefined}[]): string{
-    let getUrl = `${environment.apiUrl}/tag/?`;
+    let setParam = '';
     for(let param of params){
       for(let key in param){
-        if(typeof param[key] !== 'undefined') getUrl += `&${key}=${param[key]}`
+        if(typeof param[key] !== 'undefined'){
+          if(setParam == ''){
+            setParam = '?';
+          }
+          setParam += `&${key}=${param[key]}`
+        }
       }
     }
+    let getUrl = `${environment.apiUrl}/tag/${setParam}`;
     return getUrl;
   }
 

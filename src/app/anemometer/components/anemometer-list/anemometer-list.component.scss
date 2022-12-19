@@ -1,13 +1,32 @@
-.anemometers{
-    background-color: #f6f8fa;
-    border-radius: 10px;
-    padding: 20px 20px 5px 20px;
-}
-
-.card{
-    margin-top: 1%;
-    width: 19%;
+.actions-container {
     display: flex;
-    justify-content: space-evenly;
-    list-style-type: none;
+    align-items: center;
+    justify-content: space-between;
+  
+    button {
+      margin-right: 10px;
+    }
+  }
+  
+  .search-container {
+    display: flex;
+    align-items: center;
+  
+    mat-form-field {
+      margin-right: 10px;
+    }
+  }
+  
+  .anemometers-container {
+  h2 {
+    margin: 20px 0;
+    text-align: center;
+  }
+
+  .anemometers {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    grid-auto-rows: 1fr;
+    gap: 20px;
+  }
 }

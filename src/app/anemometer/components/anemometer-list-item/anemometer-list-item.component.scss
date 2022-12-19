@@ -1,35 +1,17 @@
-.mat-mdc-card{
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-}
+.anemometer-item {
 
-.mat-mdc-card-header{
-    flex-shrink: 0;
-}
+    height: 100%;
 
-.mat-mdc-card-title{
-    font-size: large;
-    line-height: 1.5em;
-}
+    .anemometer-item-title {
+        font-size: larger;
+    }
 
-.mat-mdc-card-content{
-    flex-grow: 1;
-}
+    .anemometer-coordinates {
+        list-style-type: none;
+    }
 
-.mat-mdc-card-footer{
-    flex-shrink: 0;
-}
-
-.anemometer-coordinates{
-    padding-left: 0;
-    flex-direction: column;
-}
-
-.anemometer-coordinates li{
-    list-style-type: none;
-}
-
-.anemometer-meanspeeds{
-    margin-top: 10px;
+    .anemometer-item-footer{
+        position: sticky;
+        top: 100%;
+    }
 }

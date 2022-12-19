@@ -1,17 +1,15 @@
-<mat-card appearance="raised" (click)="onViewAnemometer()">
-    <mat-card-header>
-      <mat-card-title>
-        <span>{{ anemometer.name | titlecase }}</span>
-      </mat-card-title>
-    </mat-card-header>
-    <mat-card-content class="d-flex flex-item-center">
-        <ul class="anemometer-coordinates">
-            <li>Lat : {{ anemometer.latitude }}</li>
-            <li>Long : {{ anemometer.longitude }}</li>
-            <li>Alt : {{ anemometer.altitude }} m</li>
-        </ul>
-    </mat-card-content>
-    <mat-card-footer>
-        <app-tags [tags]="anemometer.tags"></app-tags>
-    </mat-card-footer>
-  </mat-card>
+<mat-card class="anemometer-item" (click)="onViewAnemometer()">
+  <mat-card-header class="anemometer-item-header">
+    <mat-card-title class="anemometer-item-title">{{ anemometer.name | titlecase }}</mat-card-title>
+  </mat-card-header>
+  <mat-card-content class="d-flex flex-item-center">
+    <ul class="anemometer-coordinates">
+      <li>Lat : {{ anemometer.latitude }}</li>
+      <li>Long : {{ anemometer.longitude }}</li>
+      <li>Alt : {{ anemometer.altitude }} m</li>
+    </ul>
+  </mat-card-content>
+  <mat-card-footer class="anemometer-item-footer">
+    <app-tags [tags]="anemometer.tags"></app-tags>
+  </mat-card-footer>
+</mat-card>

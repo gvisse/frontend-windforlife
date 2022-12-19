@@ -1,84 +1,78 @@
 <mat-card appearance="raised">
-    <ng-container *ngIf="anemometer$ | async as anemometer">
-        <mat-card-header class="d-flex flex-item-center flex-justify-between">
-            <mat-card-title class="d-flex flex-item-center">
-                <span matTooltip="Cliquez pour situer sur Maps" matTooltipPosition="right">
-                    <a href="https://www.google.com/maps/@{{anemometer.latitude}},{{anemometer.longitude}},15z" target="_blank">
-                        {{ anemometer.name | titlecase }}
-                    </a>
-                </span>
-            </mat-card-title>
-            <app-tags [tags]="anemometer.tags"></app-tags>
-        </mat-card-header>
-        <mat-card-content>
-            <ul class="d-flex flex-justify-evenly">
-                <li>Lat : {{ anemometer.latitude }}</li>
-                <li>Long : {{ anemometer.longitude }}</li>
-                <li>Alt : {{ anemometer.altitude }} m</li>
-            </ul>
-            <section class="anemometer-meanspeeds" *ngIf="anemometer.mean_speed_today || anemometer.mean_speed_week">
-                <span>Mean speeds</span>
-                <ul>
-                    <li *ngIf="anemometer.mean_speed_today">Today : {{ anemometer.mean_speed_today }} kn</li>
-                    <li *ngIf="anemometer.mean_speed_week">This week : {{ anemometer.mean_speed_week }} kn</li>
-                </ul>
-            </section>
-            <mat-accordion *ngIf="winds$">
-                <mat-expansion-panel [expanded]="panelOpenState" (opened)="panelOpenState = true"
-                       (closed)="panelOpenState = false">
-                    <mat-expansion-panel-header>
-                        <mat-panel-title>
-                            Winds
-                        </mat-panel-title>
-                        <mat-panel-description>
-                            Winds stats on {{ anemometer.name }}
-                        </mat-panel-description>
-                    </mat-expansion-panel-header>
-                    <mat-spinner *ngIf="loadingWinds$ | async; else table"></mat-spinner>
-                    <ng-template #table>
-                        <table matSort (matSortChange)="sortData($event)">
-                            <tr>
-                                <th mat-sort-header="speed">Speed (kn)</th>
-                                <th mat-sort-header="direction">Direction</th>
-                                <th mat-sort-header="time">Time</th>
-                                <th *ngIf="authService.isAuthenticated()"></th>
-                            </tr>
-                            <tr *ngFor="let wind of sortedWinds">
-                                <td>{{ wind.speed }}</td>
-                                <td>{{ wind.direction }} / {{ wind.cardinal }}</td>
-                                <td>{{ wind.time | date: 'Y/MM/dd,  HH:mm'}}</td>
-                                <td *ngIf="authService.isAuthenticated()">
-                                    <button mat-icon-button color="warn" (click)="onDeleteWind(wind.id)">
-                                        <mat-icon>delete</mat-icon>
-                                    </button>
-                                </td>
-                            </tr>
-                        </table>
-                        <mat-paginator
-                            (page)="onChangePage($event)"
-                            [length]="countWinds$ | async"
-                            [pageSize]="pageSize"
-                            [showFirstLastButtons]="showFirstLastButtons"
-                            [pageSizeOptions]="showPageSizeOptions ? pageSizeOptions : []"
-                            [pageIndex]="pageIndex"
-                            aria-label="Select page">
-                        </mat-paginator>
-                    </ng-template>
-                    <mat-action-row *ngIf="authService.isAuthenticated()">
-                        <app-wind-add [anemometer_id]="anemometer.id" (createdWind)="onCreateWind($event)"></app-wind-add>
-                    </mat-action-row>
-                </mat-expansion-panel>
-            </mat-accordion>
-        </mat-card-content>
-    </ng-container>
-    <mat-card-actions>
-        <mat-spinner *ngIf="loading$ | async; else buttons"></mat-spinner>
-        <ng-template #buttons>
-            <div class="action-buttons" *ngIf="authService.isAuthenticated()">
-                <a mat-flat-button color="accent" routerLink="update">Update</a>
-                <button mat-flat-button color="warn" (click)="onDelete()">Delete</button>
-            </div>
-            <button mat-flat-button color="primary" (click)="onGoBack()">Go Back</button>
-        </ng-template>
+  <ng-container *ngIf="anemometer$ | async as anemometer">
+    <mat-card-header class="d-flex flex-item-center flex-justify-between">
+      <mat-card-title class="d-flex flex-item-center">
+        <a href="https://www.google.com/maps/@{{anemometer.latitude}},{{anemometer.longitude}},15z" target="_blank"
+          class="link" matTooltip="Cliquez pour situer sur Maps" matTooltipPosition="right">
+          {{ anemometer.name | titlecase }}
+        </a>
+      </mat-card-title>
+      <app-tags [tags]="anemometer.tags"></app-tags>
+    </mat-card-header>
+    <mat-card-content>
+      <ul class="d-flex flex-justify-evenly">
+        <li>Lat : {{ anemometer.latitude }}</li>
+        <li>Long : {{ anemometer.longitude }}</li>
+        <li>Alt : {{ anemometer.altitude }} m</li>
+      </ul>
+      <section class="anemometer-meanspeeds" *ngIf="anemometer.mean_speed_today || anemometer.mean_speed_week">
+        <span>Mean speeds</span>
+        <ul>
+          <li *ngIf="anemometer.mean_speed_today">
+            Today : {{ anemometer.mean_speed_today }} kn
+          </li>
+          <li *ngIf="anemometer.mean_speed_week">
+            This week : {{ anemometer.mean_speed_week }} kn
+          </li>
+        </ul>
+      </section>
+      <mat-accordion *ngIf="winds$">
+        <mat-expansion-panel [expanded]="panelOpenState" (opened)="panelOpenState = true"
+          (closed)="panelOpenState = false">
+          <mat-expansion-panel-header>
+            <mat-panel-title>Winds</mat-panel-title>
+            <mat-panel-description>
+              Winds stats on {{ anemometer.name }}
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          <mat-spinner *ngIf="loadingWinds$ | async; else table"></mat-spinner>
+          <ng-template #table>
+            <table matSort (matSortChange)="sortData($event)">
+              <tr>
+                <th mat-sort-header="speed">Speed (kn)</th>
+                <th mat-sort-header="direction">Direction</th>
+                <th mat-sort-header="time">Time</th>
+                <th *ngIf="authService.isAuthenticated()"></th>
+              </tr>
+              <tr *ngFor="let wind of sortedWinds">
+                <td>{{ wind.speed }}</td>
+                <td>{{ wind.direction }} / {{ wind.cardinal }}</td>
+                <td>{{ wind.time | date: 'Y/MM/dd, HH:mm'}}</td>
+                <td *ngIf="authService.isAuthenticated()">
+                  <button mat-icon-button color="warn" (click)="onDeleteWind(wind.id)">
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                </td>
+              </tr>
+            </table>
+            <mat-paginator (page)="onChangePage($event)" [length]="countWinds$ | async" [pageSize]="pageSize"
+              [showFirstLastButtons]="showFirstLastButtons" [pageSizeOptions]="
+                showPageSizeOptions ? pageSizeOptions : []
+              " [pageIndex]="pageIndex" aria-label="Select page">
+            </mat-paginator>
+          </ng-template>
+          <mat-action-row *ngIf="authService.isAuthenticated()">
+            <app-wind-add [anemometer_id]="anemometer.id" (createdWind)="onCreateWind($event)"></app-wind-add>
+          </mat-action-row>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </mat-card-content>
+    <mat-card-actions class="mat-mdc-card-actions">
+      <div class="action-buttons" *ngIf="authService.isAuthenticated()">
+        <a mat-flat-button color="accent" routerLink="update">Update</a>
+        <button mat-flat-button color="warn" (click)="onDelete()">Delete</button>
+      </div>
+      <button mat-flat-button color="primary" (click)="onGoBack()">Go Back</button>
     </mat-card-actions>
-  </mat-card>
+  </ng-container>
+</mat-card>

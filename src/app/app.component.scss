@@ -1,8 +1,16 @@
-.main-content {
-    border-radius: 5px;
-    box-sizing: border-box;
-    padding: 20px;
-    max-width: 75%;
-    margin: 3% auto;
-    height: 75%;
+main{
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+
+    .main-content {
+        border-radius: 5px;
+        box-sizing: border-box;
+        padding: 20px;
+        width: 75%;
+        margin: 3% auto;
+        display: flex;
+        flex: 1 1 auto;
+    }
 }
+

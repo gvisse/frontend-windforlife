@@ -1,39 +1,38 @@
-<div class="d-flex flex-wrap flex-justify-between flex-item-center">
-    <div class="actions-buttons">
-        <a mat-flat-button color="primary" routerLink="new" *ngIf="authService.isAuthenticated()">Add anemometer</a>
+<div class="actions-container">
+    <button mat-raised-button color="primary" routerLink="new" *ngIf="authService.isAuthenticated()">
+      Add anemometer
+    </button>
+    <div class="search-container">
+      <mat-form-field>
+        <input matInput type="text" [formControl]="searchCtrl">
+        <mat-icon matSuffix>search</mat-icon>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-select [formControl]="searchTypeCtrl">
+          <mat-option *ngFor="let option of searchTypeOptions" [value]="option.value">{{ option.label }}</mat-option>
+        </mat-select>
+      </mat-form-field>
     </div>
-    <div class="search">
-        <mat-form-field appearance="fill">
-            <input matInput type="text" [formControl]="searchCtrl">
-            <mat-icon matSuffix>search</mat-icon>
-        </mat-form-field>
-        <mat-form-field appearance="fill">
-            <mat-select [formControl]="searchTypeCtrl">
-                <mat-option *ngFor="let option of searchTypeOptions" [value]="option.value">{{ option.label }}</mat-option>
-            </mat-select>
-        </mat-form-field>
-    </div>
-</div>
-<div class="anemometers box-shadow">
-    <div class="bold-title">
-        <h2>Anemometers</h2>
-    </div>
-    <mat-spinner *ngIf="loading$ | async; else anemos"></mat-spinner>
-    <ng-template #anemos>
-        <mat-nav-list *ngIf="anemometers$ | async as anemometers" class="d-flex flex-wrap flex-justify-between">
-            <app-anemometer-list-item class="card" mat-list-item
-                *ngFor="let anemometer of anemometers" 
-                [anemometer]="anemometer">
-            </app-anemometer-list-item>
-        </mat-nav-list>
+  </div>
+  
+  <div class="anemometers-container">
+    <h2>Anemometers</h2>
+    <mat-spinner *ngIf="loading$ | async; else anemometers"></mat-spinner>
+    <ng-template #anemometers>
+      <div *ngIf="anemometers$ | async as anemometers" class="anemometers">
+        <app-anemometer-list-item class="anemometer-card"
+          *ngFor="let anemometer of anemometers" 
+          [anemometer]="anemometer">
+        </app-anemometer-list-item>
+      </div>
     </ng-template>
     <mat-paginator *ngIf="anemometers$ | async as anemometers"
-        (page)="onChangePage($event)"
-        [length]="countAnemometers$ | async"
-        [pageSize]="pageSize"
-        [showFirstLastButtons]="showFirstLastButtons"
-        [pageSizeOptions]="showPageSizeOptions ? pageSizeOptions : []"
-        [pageIndex]="pageIndex"
-        aria-label="Select page">
+      (page)="onChangePage($event)"
+      [length]="countAnemometers$ | async"
+      [pageSize]="pageSize"
+      [showFirstLastButtons]="showFirstLastButtons"
+      [pageSizeOptions]="showPageSizeOptions ? pageSizeOptions : []"
+      [pageIndex]="pageIndex"
+      aria-label="Select page">
     </mat-paginator>
-</div>
+  </div>

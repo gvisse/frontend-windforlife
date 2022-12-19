@@ -2,6 +2,21 @@ html, body { height: 100%; }
 body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
+  display: flex;
+}
+
+app-root{
+  display: flex;
+  flex: 1;
+}
+
+app-anemometer-list,
+app-anemometer-new,
+app-single-anemometer,
+app-map-wind-stats,
+app-tag-list,
+app-wind-list{
+  width: 100%;
 }
 
 a {

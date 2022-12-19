@@ -1,5 +1,5 @@
 import { DebugElement } from '@angular/core';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { Tag } from '../../models/tag.model';
 
@@ -9,16 +9,16 @@ describe('TagListItemComponent', () => {
   let component: TagListItemComponent;
   let fixture: ComponentFixture<TagListItemComponent>;
 
-  let tagDe : DebugElement;
+  let tagDe: DebugElement;
   let tagEl: HTMLElement;
 
-  let expectedTag : Tag;
+  let expectedTag: Tag;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ TagListItemComponent ]
+      declarations: [TagListItemComponent]
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(TagListItemComponent);
     component = fixture.componentInstance;
@@ -26,7 +26,7 @@ describe('TagListItemComponent', () => {
     tagDe = fixture.debugElement;
     tagEl = tagDe.nativeElement;
 
-    expectedTag = {id: 42, name: 'Response', anemos__count: 8}
+    expectedTag = { id: 42, name: 'Response', anemos__count: 8 }
 
     component.tag = expectedTag;
     component.canChange = true;
@@ -43,28 +43,38 @@ describe('TagListItemComponent', () => {
     expect(tagEl.textContent).toContain(expectedTagName);
   });
 
-  it('should render nb anemometer on tag', () =>{
+  it('should render nb anemometer on tag', () => {
     const expectedNbAnemoTag = expectedTag.anemos__count;
     expect(tagEl.textContent).toContain(`${expectedNbAnemoTag}`);
   });
 
-  it('should render update button', ()=>{
+  it('should render update button', () => {
     expect(tagEl.querySelector('a:not(.tag-name)')).toBeTruthy();
   });
 
-  it('should render delete button', ()=>{
+  it('should render delete button', () => {
     expect(tagEl.querySelector('button')).toBeTruthy();
   });
 
-  it('should not render update button', ()=>{
+  it('should not render update button', () => {
     component.canChange = false;
     fixture.detectChanges();
     expect(tagEl.querySelector('a:not(.tag-name)')).toBeFalsy();
   });
 
-  it('should not render delete button', ()=>{
+  it('should not render delete button', () => {
     component.canChange = false;
     fixture.detectChanges();
     expect(tagEl.querySelector('button')).toBeFalsy();
   });
+
+  it('should output tag\'s id', fakeAsync(() => {
+    jest.spyOn(component, 'onDelete');
+
+    let deleteButton = fixture.debugElement.nativeElement.querySelector('button');
+    deleteButton.click();
+    tick();
+    expect(component.onDelete).toHaveBeenCalled();
+  }));
+  
 });

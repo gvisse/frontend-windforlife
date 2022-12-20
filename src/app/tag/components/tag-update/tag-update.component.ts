@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, NgZone, OnInit } from '@angular/core';
 import { FormControl, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, switchMap, take, tap } from 'rxjs';
@@ -19,7 +19,8 @@ export class TagUpdateComponent implements OnInit {
   constructor(private formBuilder: FormBuilder,
               private tagsService: TagsService,
               private route: ActivatedRoute,
-              private router: Router)
+              private router: Router,
+              private ngZone:NgZone)
   {
 
   }
@@ -55,12 +56,12 @@ export class TagUpdateComponent implements OnInit {
       tap(tag => {
         this.tagsService.updateTag(tag.id, this.tagCtrl.value);
         this.tagsService.goToPage({page: 1, size:10});
-        this.onGoback();
+        this.ngZone.run(() => this.onGoback());
       })
     ).subscribe();
   }
 
-  onGoback(){
+  private onGoback(){
     this.router.navigateByUrl('tag');
   }
 }

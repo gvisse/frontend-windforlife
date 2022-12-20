@@ -73,7 +73,7 @@ export class AuthService {
   }
 
   getUser(): User{
-    return JSON.parse(localStorage.getItem('user') || '');
+    return JSON.parse(localStorage.getItem('user') || '{"first_name":"", "last_name":""}');
   }
 
   refreshToken(): Observable<any>{

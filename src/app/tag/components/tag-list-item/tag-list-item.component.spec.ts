@@ -1,6 +1,7 @@
 import { DebugElement } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
+import { RouterTestingModule } from '@angular/router/testing';
 import { Tag } from '../../models/tag.model';
 
 import { TagListItemComponent } from './tag-list-item.component';
@@ -16,6 +17,7 @@ describe('TagListItemComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
+      imports: [ RouterTestingModule ],
       declarations: [TagListItemComponent]
     })
       .compileComponents();
@@ -52,6 +54,12 @@ describe('TagListItemComponent', () => {
     expect(tagEl.querySelector('a:not(.tag-name)')).toBeTruthy();
   });
 
+  it('should go to the update url of the tag', () => {
+    let href = fixture.debugElement.query(By.css('a:not(.tag-name)')).nativeElement
+    .getAttribute('href');
+    expect(href).toEqual('/42/update');
+  });
+
   it('should render delete button', () => {
     expect(tagEl.querySelector('button')).toBeTruthy();
   });
@@ -76,5 +84,5 @@ describe('TagListItemComponent', () => {
     tick();
     expect(component.onDelete).toHaveBeenCalled();
   }));
-  
+
 });

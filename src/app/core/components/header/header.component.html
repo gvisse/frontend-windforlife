@@ -34,7 +34,7 @@
           <!--  -->
           <!-- menu principal -->
           <mat-menu #authent="matMenu" xPosition="before">
-            <button mat-menu-item (click)="go('/login', authService.isAuthenticated())">
+            <button mat-menu-item class="login-logout" (click)="go('/login', authService.isAuthenticated())">
               <mat-icon *ngIf="authService.isAuthenticated()">power_settings_new</mat-icon>
               {{authService.isAuthenticated() ? 'Déconnexion' : 'Connexion'}}
             </button>

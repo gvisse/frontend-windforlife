@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, NgZone, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { User } from 'src/app/auth/models/user-credentials.model';
 import { AuthService } from '../../services/auth.service';
@@ -12,7 +12,7 @@ export class HeaderComponent implements OnInit {
 
   user?: User;
 
-  constructor(private router: Router, public authService: AuthService) {
+  constructor(private router: Router, public authService: AuthService, private ngZone: NgZone) {
   }
   
   ngOnInit(): void {
@@ -20,13 +20,13 @@ export class HeaderComponent implements OnInit {
   }
 
   getUser() {
-   return `${this.authService?.getUser()?.first_name} ${this.authService?.getUser()?.last_name}`;
+   return `${this.authService.getUser()?.first_name} ${this.authService.getUser()?.last_name}`;
   }
 
   go(url: string, logout = false) {
     if (logout) {
       this.authService.logout();
     }
-    this.router.navigate([url]);
+    this.ngZone.run(() => this.router.navigate([url]));
   }
 }

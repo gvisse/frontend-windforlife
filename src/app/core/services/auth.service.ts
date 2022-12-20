@@ -2,8 +2,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { map, Observable, ReplaySubject } from 'rxjs';
-import { User, UserCredentials } from 'src/app/auth/models/user-credentials.model';
-import { environment } from 'src/environments/environment';
+import { User, UserCredentials } from '../../auth/models/user-credentials.model';
+import { environment } from '../../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {

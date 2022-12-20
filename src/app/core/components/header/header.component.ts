@@ -20,7 +20,7 @@ export class HeaderComponent implements OnInit {
   }
 
   getUser() {
-   return `${this.authService.getUser()?.first_name} ${this.authService.getUser()?.last_name}`;
+   return `${this.authService.getUser().first_name} ${this.authService.getUser().last_name}`.trim();
   }
 
   go(url: string, logout = false) {

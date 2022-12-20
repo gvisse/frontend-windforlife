@@ -71,10 +71,9 @@ describe('HeaderComponent', () => {
     expect(component.getUser()).toBe('User Test');
   });
 
-  // it('should not return fullname of the user because no user connected', () => {
-  //   service.logout();
-  //   expect(component.getUser()).toBe({});
-  // });
+  it('should not return fullname of the user because no user connected', () => {
+    expect(component.getUser()).toBe('');
+  });
 
   it('should go to login page', () => {
     const navigateSpy = jest.spyOn(router, 'navigate');
@@ -88,5 +87,6 @@ describe('HeaderComponent', () => {
     component.go('/login', true);
     expect(navigateSpy).toHaveBeenCalledWith(['/login']);
     expect(authSpy).toHaveBeenCalled();
+    expect(component.getUser()).toBe('');
   });
 });

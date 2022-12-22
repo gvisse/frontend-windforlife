@@ -23,15 +23,6 @@ export class WindsService {
   get countWinds$(): Observable<number>{
     return this._countWinds$.asObservable();
   }
-  private _nextPage$ = new BehaviorSubject<string>('');
-  get nextPage$(): Observable<string>{
-    return this._nextPage$.asObservable();
-  }
-
-  private _previousPage$ = new BehaviorSubject<string>('');
-  get previousPage$(): Observable<string>{
-    return this._previousPage$.asObservable();
-  }
 
   private setLoadingStatus(loading: boolean){
     this._loading$.next(loading);

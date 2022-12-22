@@ -29,16 +29,6 @@ export class AnemometersService {
   get countAnemometers$(): Observable<number>{
     return this._countAnemometers$.asObservable();
   }
-
-  private _nextPage$ = new BehaviorSubject<string>('');
-  get nextPage$(): Observable<string>{
-    return this._nextPage$.asObservable();
-  }
-
-  private _previousPage$ = new BehaviorSubject<string>('');
-  get previousPage$(): Observable<string>{
-    return this._previousPage$.asObservable();
-  }
   
   private setLoadingStatus(loading: boolean){
     this._loading$.next(loading);

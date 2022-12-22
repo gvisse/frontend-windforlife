@@ -78,7 +78,7 @@ describe('TagListComponent', () => {
     expect(component.pageSize).toEqual(e.pageSize);
   });
 
-  it('should get tags from the server when getTagsFromServer is called and initialize obeservable', () => {
+  it('should get tags from the server when getTagsFromServer is called and initialize observable', () => {
     const spy = jest.spyOn(tagsService, 'getTagsFromServer');
     jest.spyOn(tagsService, 'tags$', 'get').mockReturnValue(of([]));
     jest.spyOn(tagsService, 'countTags$', 'get').mockReturnValue(of(0));
@@ -89,13 +89,14 @@ describe('TagListComponent', () => {
     expect(spy).toHaveBeenCalled();
     component.tags$.subscribe(tags => {
       expect(tags).toEqual([]);
-    })
+    });
     component.countTags$.subscribe(count => {
       expect(count).toEqual(0);
-    })
+    });
     component.loading$.subscribe(loading => {
       expect(loading).toBeFalsy();
-    })
+    });
+
   });
 
 });

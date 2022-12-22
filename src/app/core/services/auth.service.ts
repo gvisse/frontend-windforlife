@@ -14,7 +14,6 @@ export class AuthService {
 
   constructor(private http: HttpClient,
               private jwtService: JwtHelperService) {
-    // this.sendUser();
   }
   /**
    * Authentification /api-token-auth/
@@ -84,11 +83,6 @@ export class AuthService {
       .pipe(
         map((token: any) => localStorage.setItem("token", token['token']))
       );
-  }
-
-  sendUser() {
-    this.user = this.getUser();
-    this.userSource.next(this.user);
   }
 
   /**

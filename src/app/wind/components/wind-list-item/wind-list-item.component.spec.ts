@@ -1,6 +1,6 @@
 import { formatDate, registerLocaleData } from '@angular/common';
 import localeFr from '@angular/common/locales/fr';
-import { DebugElement, LOCALE_ID } from '@angular/core';
+import { DebugElement, LOCALE_ID, NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { Wind } from '../../models/wind.model';
@@ -23,7 +23,8 @@ describe('WindListItemComponent', () => {
       declarations: [ WindListItemComponent ],
       providers: [{
         provider: LOCALE_ID, useValue: 'fr-FR'
-      }]
+      }],
+      schemas: [NO_ERRORS_SCHEMA]
     })
     .compileComponents();
 
@@ -75,4 +76,15 @@ describe('WindListItemComponent', () => {
     expect(windEl.querySelector('button')).toBeFalsy();
   });
   
+  it('should emit the wind\'s id on click', () =>{
+    const deletedWindSpy = jest.fn();
+    jest.spyOn(component, 'onDeleteWind');
+    component.deletedWind.subscribe(deletedWindSpy);
+
+    let deleteButton = fixture.debugElement.nativeElement.querySelector('button');
+    deleteButton.click();
+    expect(component.onDeleteWind).toHaveBeenCalled();
+    expect(deletedWindSpy).toHaveBeenCalledWith(42);
+  });
+
 });

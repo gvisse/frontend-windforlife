@@ -9,6 +9,13 @@ describe('AuthService', () => {
     let httpMock: HttpTestingController;
 
     let url_login = `${environment.apiUrl}/login/`
+    const mockResponseToken = { token: 'refreshed-mock-token' };
+
+    function flushRequest(url: string, method: string, response: {}){
+        const request = httpMock.expectOne(url);
+        expect(request.request.method).toBe(method);
+        request.flush(response);
+    }
 
     beforeEach(() => {
         TestBed.configureTestingModule({
@@ -38,20 +45,14 @@ describe('AuthService', () => {
             expect(response).toEqual(mockResponse);
         });
 
-        const request = httpMock.expectOne(`${url_login}`);
-        expect(request.request.method).toBe('POST');
-        request.flush(mockResponse);
+        flushRequest(`${url_login}`, 'POST', mockResponse);
     });
 
     it('should refresh the token', () => {
-        const mockResponse = { token: 'refreshed-mock-token' };
         service.refreshToken().subscribe(response => {
-            expect(response).toEqual(mockResponse);
+            expect(response).toEqual(mockResponseToken);
         });
-
-        const request = httpMock.expectOne(`${environment.apiUrl}/token/refresh/`);
-        expect(request.request.method).toBe('POST');
-        request.flush(mockResponse);
+        flushRequest(`${environment.apiUrl}/token/refresh/`, 'POST', mockResponseToken);
     });
 
     it('should logout and remove the token and user from local storage', () => {
@@ -72,11 +73,20 @@ describe('AuthService', () => {
         expect(service.isAuthenticated()).toBe(false);
     });
 
-    // it('should return the token expiration date', () => {
-    //     const expirationDate = new Date();
-    //     jest.spyOn(service.jwtService, 'getTokenExpirationDate').mockReturnValue(expirationDate);
-    //     expect(service.getTokenExpiredDate()).toEqual(expirationDate);
-    // });
+    it('should refresh the token if he\'s close to expire', () => {
+        jest.spyOn(service, 'isTokenExpired').mockReturnValue(false);
+        jest.spyOn(service, 'isCloseToExpiring').mockReturnValue(true);
+        const spy = jest.spyOn(service, 'refreshToken');
+        service.isAuthenticated();
+        expect(spy).toHaveBeenCalled();
+        flushRequest(`${environment.apiUrl}/token/refresh/`, 'POST', mockResponseToken);
+    });
+
+    it('should return the token expiration date', () => {
+        const expirationDate = new Date();
+        jest.spyOn(service, 'getTokenExpiredDate').mockReturnValue(expirationDate);
+        expect(service.getTokenExpiredDate()).toEqual(expirationDate);
+    });
 
     it('should return true if the token is close to expiring', () => {
         const expirationDate = new Date(new Date().getTime() + 5 * 60000);

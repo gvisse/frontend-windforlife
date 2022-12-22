@@ -47,8 +47,6 @@ export class WindsService {
         this.lastWindsLoaded = Date.now();
         this._winds$.next(winds['results']);
         this._countWinds$.next(winds['count']);
-        this._nextPage$.next(winds['next']);
-        this._previousPage$.next(winds['previous']);
         this.setLoadingStatus(false);
       })
     ).subscribe();

@@ -53,8 +53,6 @@ export class AnemometersService {
         this.lastAnemosLoaded = Date.now();
         this._anemometers$.next(anemometers['results']);
         this._countAnemometers$.next(anemometers['count']);
-        this._nextPage$.next(anemometers['next']);
-        this._previousPage$.next(anemometers['previous']);
         this.setLoadingStatus(false);
       })
     ).subscribe();

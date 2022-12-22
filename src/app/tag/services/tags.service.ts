@@ -31,16 +31,6 @@ export class TagsService {
   get countTags$(): Observable<number>{
     return this._countTags$.asObservable();
   }
-
-  private _nextPage$ = new BehaviorSubject<string>('');
-  get nextPage$(): Observable<string>{
-    return this._nextPage$.asObservable();
-  }
-
-  private _previousPage$ = new BehaviorSubject<string>('');
-  get previousPage$(): Observable<string>{
-    return this._previousPage$.asObservable();
-  }
   
   private setLoadingStatus(loading: boolean){
     this._loading$.next(loading);
@@ -71,8 +61,6 @@ export class TagsService {
         this.lastTagsLoaded = Date.now();
         this._tags$.next(tags['results']);
         this._countTags$.next(tags['count']);
-        this._nextPage$.next(tags['next']);
-        this._previousPage$.next(tags['previous']);
         this.setLoadingStatus(false);
       })
     ).subscribe();

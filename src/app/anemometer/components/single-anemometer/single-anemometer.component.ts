@@ -1,11 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, NgZone, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { Sort } from '@angular/material/sort';
 import { ActivatedRoute, Router } from '@angular/router';
 import { map, Observable, switchMap, take, tap } from 'rxjs';
-import { AuthService } from 'src/app/core/services/auth.service';
-import { Wind } from 'src/app/wind/models/wind.model';
-import { WindsService } from 'src/app/wind/services/winds.service';
+import { AuthService } from '../../../core/services/auth.service';
+import { Wind } from '../../../wind/models/wind.model';
+import { WindsService } from '../../../wind/services/winds.service';
 import { Anemometer } from '../../models/anemometer.model';
 import { AnemometersService } from '../../services/anemometers.service';
 
@@ -39,7 +39,8 @@ export class SingleAnemometerComponent implements OnInit {
               private windsService: WindsService,
               public authService: AuthService,
               private route: ActivatedRoute,
-              private router: Router){}
+              private router: Router,
+              private ngZone: NgZone){}
 
   ngOnInit(): void {
       this.initObservables();
@@ -104,7 +105,7 @@ export class SingleAnemometerComponent implements OnInit {
   }
 
   onGoBack() {
-    this.router.navigateByUrl('/anemometer');
+    this.ngZone.run(() => this.router.navigateByUrl('/anemometer'));
   }
 
   sortData(sort: Sort) {

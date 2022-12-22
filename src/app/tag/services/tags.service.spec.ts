@@ -10,12 +10,18 @@ describe('TagsService', () => {
 	const mockResponseTag = { id: 1, name: 'tag1' };
 	const mockResponseTagList = [{ id: 1, name: 'tag1' }, { id: 2, name: 'tag2' }];
 
+	function flushRequest(url: string, method: string, response: {}) {
+		const req = httpMock.expectOne(url);
+		expect(req.request.method).toBe(method);
+		req.flush(response);
+	}
 
-	beforeEach(() => {
-		TestBed.configureTestingModule({
+	beforeEach(async () => {
+		await TestBed.configureTestingModule({
 			imports: [HttpClientTestingModule],
 			providers: [TagsService]
-		});
+		}).compileComponents();
+
 		service = TestBed.inject(TagsService);
 		httpMock = TestBed.inject(HttpTestingController);
 	});
@@ -33,11 +39,9 @@ describe('TagsService', () => {
 			service.getAllTags();
 			service.allTags$.subscribe(tags => {
 				expect(tags).toEqual(mockResponseTagList);
-			})
+			});
 
-			const req = httpMock.expectOne(`${apiUrl}/tag/?page_size=0`);
-			expect(req.request.method).toBe('GET');
-			req.flush(mockResponseTagList);
+			flushRequest(`${apiUrl}/tag/?page_size=0`, 'GET', mockResponseTagList)
 		});
 	});
 
@@ -47,12 +51,21 @@ describe('TagsService', () => {
 
 			service.tags$.subscribe(tags => {
 				expect(tags).toEqual(mockResponseTagList);
-			})
-
-			const req = httpMock.expectOne(`${apiUrl}/tag/`);
-			expect(req.request.method).toBe('GET');
-			req.flush(mockResponseTagList);
+			});
+			flushRequest(`${apiUrl}/tag/`, 'GET', mockResponseTagList)
 		});
+
+		it('should not call the server if tags have been loaded in the last 5 minutes', () => {
+			service.getAllTags();
+			service.allTags$.subscribe(tags => {
+				expect(tags).toEqual(mockResponseTagList);
+			});
+
+			flushRequest(`${apiUrl}/tag/?page_size=0`, 'GET', mockResponseTagList)
+
+			service.getTagsFromServer();
+			httpMock.expectNone(`${apiUrl}/tag/`);
+		})
 	});
 
 	describe('getTagById', () => {
@@ -61,9 +74,7 @@ describe('TagsService', () => {
 				expect(tag).toEqual(mockResponseTag);
 			});
 
-			const req = httpMock.expectOne(`${apiUrl}/tag/1/`);
-			expect(req.request.method).toBe('GET');
-			req.flush(mockResponseTag);
+			flushRequest(`${apiUrl}/tag/1/`, 'GET', mockResponseTag)
 		});
 	});
 
@@ -73,53 +84,51 @@ describe('TagsService', () => {
 			service.createTag('tag1').subscribe(tag => {
 				expect(tag).toEqual(mockResponseTag);
 			});
+
 		});
 
-		function flushRequestOfCreateTag() {
-			const req1_1 = httpMock.expectOne(`${apiUrl}/tag/`);
-			expect(req1_1.request.method).toBe('POST');
-			req1_1.flush(mockResponseTag);
-
-			const req1_2 = httpMock.expectOne(`${apiUrl}/tag/`);
-			expect(req1_2.request.method).toBe('GET');
-			req1_2.flush(mockResponseTag);
+		function flushRequestOfCreateTag(response: {}) {
+			flushRequest(`${apiUrl}/tag/`, 'POST', response);
+			flushRequest(`${apiUrl}/tag/`, 'GET', response);
 		}
 
 		it('should return an observable of the created Tag', () => {
-			flushRequestOfCreateTag();
+			flushRequestOfCreateTag(mockResponseTag);
 		});
 
-		it('should update a tag', () => {
-			flushRequestOfCreateTag();
-			const mockResponseUpdate = { id: 1, name: 'tagTest1' };
-			service.updateTag(1, 'tagTest1');
+		it('should create and update a tag', () => {
+			flushRequestOfCreateTag(mockResponseTag);
+			const tags = [
+				{ id: 1, name: 'Tag 1' },
+				{ id: 2, name: 'Tag 2' },
+				{ id: 3, name: 'Tag 3' },
+			];
+			const tagId = 2;
+			const updatedName = 'Updated Tag Name';
+			const expectedTags = [
+				{ id: 1, name: 'Tag 1' },
+				{ id: 2, name: updatedName },
+				{ id: 3, name: 'Tag 3' },
+			];
 
-			service.getTagById(1).subscribe(tag => {
-				expect(tag).toEqual(mockResponseUpdate);
-			});
+			jest.spyOn(service, 'tags$', 'get').mockReturnValue(of(tags));
 
-			const req2 = httpMock.expectOne(`${apiUrl}/tag/1/`);
-			expect(req2.request.method).toBe('GET');
-			req2.flush(mockResponseUpdate);
+			service.updateTag(tagId, updatedName);
+			service.tags$.subscribe(updatedTags => {
+				expect(updatedTags).toEqual(expectedTags);
+			})
+
+			flushRequest(`${apiUrl}/tag/${tagId}/`, 'PATCH', expectedTags)
 		});
 
 		it('should delete a tag', () => {
-			flushRequestOfCreateTag();
+			flushRequestOfCreateTag(mockResponseTag);
 			service.deleteTag(1);
 
-			const req2_1 = httpMock.expectOne(`${apiUrl}/tag/1/`);
-			expect(req2_1.request.method).toBe('DELETE');
-			req2_1.flush(1);
-
-			const req2_2 = httpMock.expectOne(`${apiUrl}/tag/`);
-			expect(req2_2.request.method).toBe('GET');
-			req2_2.flush({});
-
+			flushRequest(`${apiUrl}/tag/1/`, 'DELETE', 1);
+			flushRequest(`${apiUrl}/tag/`, 'GET', {});
 			service.getTagById(1).subscribe();
-
-			const req2_3 = httpMock.expectOne(`${apiUrl}/tag/1/`);
-			expect(req2_3.request.method).toBe('GET');
-			req2_3.flush({});
+			flushRequest(`${apiUrl}/tag/1/`, 'GET', {});
 		});
 
 	});
@@ -143,10 +152,7 @@ describe('TagsService', () => {
 			};
 
 			service.goToPage({ page: 2, size: 10 });
-
-			const req1 = httpMock.expectOne(`${apiUrl}/tag/?&page=2&page_size=10`);
-			expect(req1.request.method).toBe('GET');
-			req1.flush(mockResponse);
+			flushRequest(`${apiUrl}/tag/?&page=2&page_size=10`, 'GET', mockResponse);
 
 			service.tags$.subscribe(tags => {
 				expect(tags).toEqual([

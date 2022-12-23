@@ -4,8 +4,12 @@
         <input matInput type="number" placeholder="Speed" formControlName="speed">
     </mat-form-field>
     <mat-form-field appearance="fill">
+        <mat-label>Direction</mat-label>
+        <input matInput type="number"  placeholder="Direction" min="0" step="1" formControlName="direction">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
         <mat-label>Date</mat-label>
-        <input matInput type="datetime-local" placeholder="start date" formControlName="time">
+        <input matInput type="datetime-local" class="form-control" placeholder="start date" formControlName="time">
         <mat-error *ngIf="windForm.controls['time'].errors">{{windForm.controls['time'].errors['invalidDate']}}</mat-error>
     </mat-form-field>
     <mat-form-field appearance="fill">

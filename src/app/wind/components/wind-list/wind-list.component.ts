@@ -41,7 +41,7 @@ export class WindListComponent implements OnInit {
     this.countWinds$ = this.windsService.countWinds$;
   }
 
-  onCreateWind(createdWind: {speed: number, time: Date, anemometer_id:number}){
+  onCreateWind(createdWind: {speed: number, direction: number, time: Date, anemometer_id:number}){
     this.windsService.createWind(createdWind);
   }
 

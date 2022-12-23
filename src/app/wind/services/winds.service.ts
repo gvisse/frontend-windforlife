@@ -66,7 +66,7 @@ export class WindsService {
     return this.winds$
   }
 
-  createWind(formValue: {speed: number, time: Date, anemometer_id: number}){
+  createWind(formValue: {speed: number, direction: number, time: Date, anemometer_id: number}){
     this.setLoadingStatus(true);
     this.http.post<Wind>(`${environment.apiUrl}/wind/`, formValue).pipe(
       tap(() => this.getWinds())

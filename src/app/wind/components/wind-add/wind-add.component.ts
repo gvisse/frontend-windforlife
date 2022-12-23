@@ -21,11 +21,10 @@ export class WindAddComponent implements OnInit {
   anemometerCtrl = new FormControl();
   
   @Input() anemometer_id?: number;
-  @Output() createdWind = new EventEmitter<{speed: number, time: Date, anemometer_id: number}>()
+  @Output() createdWind = new EventEmitter<{speed: number, direction: number, time: Date, anemometer_id: number}>()
 
   constructor(private fb: FormBuilder,
-              private anemometersService: AnemometersService,
-              private windsService: WindsService)
+              private anemometersService: AnemometersService)
   {
   }
 
@@ -39,6 +38,7 @@ export class WindAddComponent implements OnInit {
     this.windForm = this.fb.group(
       {
         speed: [null, [Validators.required, Validators.min(0)]],
+        direction: [null, [Validators.required, Validators.min(0), Validators.max(360)]],
         time: [null, [Validators.required, dateValidator()]],
         anemometer_id : this.anemometerCtrl
       },{

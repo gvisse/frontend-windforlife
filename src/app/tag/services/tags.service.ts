@@ -50,8 +50,7 @@ export class TagsService {
         }
       }
     }
-    let getUrl = `${environment.apiUrl}/tag/${setParam}`;
-    return getUrl;
+    return `${environment.apiUrl}/tag/${setParam}`;
   }
 
   private getTags(page?: number, size?: number): void{

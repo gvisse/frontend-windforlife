@@ -31,13 +31,18 @@ export class WindsService {
   private lastWindsLoaded = 0;
 
   private setUrl(params: {[key:string]: string|number|undefined}[]): string{
-    let getUrl = `${environment.apiUrl}/wind/?`;
+    let setParam = '';
     for(let param of params){
       for(let key in param){
-        if(typeof param[key] !== 'undefined') getUrl += `&${key}=${param[key]}`
+        if(typeof param[key] !== 'undefined'){
+          if(setParam == ''){
+            setParam = '?';
+          }
+          setParam += `&${key}=${param[key]}`
+        }
       }
     }
-    return getUrl;
+    return `${environment.apiUrl}/wind/${setParam}`;
   }
 
   private getWinds(anemometer_id?: number, page?: number, size?:number){

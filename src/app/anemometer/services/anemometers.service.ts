@@ -37,13 +37,18 @@ export class AnemometersService {
   private lastAnemosLoaded = 0;
 
   private setUrl(params: {[key:string]: string|number|undefined}[]): string{
-    let getUrl = `${environment.apiUrl}/anemometer/?`;
+    let setParam = '';
     for(let param of params){
       for(let key in param){
-        if(typeof param[key] !== 'undefined') getUrl += `&${key}=${param[key]}`
+        if(typeof param[key] !== 'undefined'){
+          if(setParam == ''){
+            setParam = '?';
+          }
+          setParam += `&${key}=${param[key]}`
+        }
       }
     }
-    return getUrl;
+    return `${environment.apiUrl}/anemometer/${setParam}`;
   }
 
   private getAnemometers(page?: number, size?: number){

@@ -62,10 +62,10 @@ describe('AnemometersService', () => {
 		flushRequest(`${environment.apiUrl}/anemometer/`, 'GET', mockResponse);
 	});
 
-	it('should not call the server if tags have been loaded in the last 5 minutes', () => {
+	it('should not call the server if anemometers have been loaded in the last 5 minutes', () => {
 		service.getAllAnemometers();
-		service.allAnemometers$.subscribe(tags => {
-			expect(tags).toEqual([mockAnemometer1, mockAnemometer2]);
+		service.allAnemometers$.subscribe(anemometers => {
+			expect(anemometers).toEqual([mockAnemometer1, mockAnemometer2]);
 		});
 
 		flushRequest(`${environment.apiUrl}/anemometer/?page_size=0`, 'GET', [mockAnemometer1, mockAnemometer2])
@@ -76,8 +76,8 @@ describe('AnemometersService', () => {
 
 	it('should fetch all anemometers from the server', () => {
 		service.getAllAnemometers();
-		service.allAnemometers$.subscribe(tags => {
-			expect(tags).toEqual([mockAnemometer1, mockAnemometer2]);
+		service.allAnemometers$.subscribe(anemometers => {
+			expect(anemometers).toEqual([mockAnemometer1, mockAnemometer2]);
 		});
 		flushRequest(`${environment.apiUrl}/anemometer/?page_size=0`, 'GET', [mockAnemometer1, mockAnemometer2])
 	});

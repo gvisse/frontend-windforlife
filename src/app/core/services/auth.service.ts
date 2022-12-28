@@ -10,13 +10,16 @@ export class AuthService {
   private user?: User;
   private url_login = `${environment.apiUrl}/login/`;
   private userSource = new ReplaySubject<User>(1);
-  userActivate$ = this.userSource.asObservable();
-
+  
   constructor(private http: HttpClient,
-              private jwtService: JwtHelperService) {
+    private jwtService: JwtHelperService) {
   }
-  /**
-   * Authentification /api-token-auth/
+
+  get userActivate$(){
+    return this.userSource.asObservable();
+  }
+    /**
+     * Authentification /api-token-auth/
    * @param {UserCredentials} user : l'utilisateur a connecté
    * @return any dont token
    */ 

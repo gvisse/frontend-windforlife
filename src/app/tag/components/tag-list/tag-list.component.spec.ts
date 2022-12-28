@@ -7,7 +7,6 @@ import { AuthService } from '../../../core/services/auth.service';
 import { of } from 'rxjs';
 import { DebugElement, NO_ERRORS_SCHEMA } from '@angular/core';
 import { JwtHelperService, JWT_OPTIONS } from '@auth0/angular-jwt';
-import { NewTagComponent } from '../new-tag/new-tag.component';
 
 describe('TagListComponent', () => {
 

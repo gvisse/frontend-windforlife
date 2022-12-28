@@ -47,6 +47,7 @@ export class AuthService {
     else{
       if(this.getToken()){
         localStorage.removeItem('token');
+        localStorage.removeItem('refresh');
         localStorage.removeItem('user');
       }
       return false;
@@ -71,6 +72,10 @@ export class AuthService {
     return localStorage.getItem('token') || '';
   }
 
+  getRefreshToken(){
+    return localStorage.getItem('refresh') || '';
+  }
+
   getUser(): User{
     return JSON.parse(localStorage.getItem('user') || '');
   }
@@ -79,7 +84,7 @@ export class AuthService {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json', Accept: 'application/json'
     });
-    return this.http.post(`${environment.apiUrl}/token/refresh/`, {'token': this.getToken()}, {headers})
+    return this.http.post(`${environment.apiUrl}/token/refresh/`, {'refresh': this.getRefreshToken()}, {headers})
       .pipe(
         map((token: any) => localStorage.setItem("token", token['token']))
       );
@@ -91,9 +96,11 @@ export class AuthService {
    * @private
    */
   private _authenticated(data: any): User {
-    localStorage.setItem('token', data.token);
-    localStorage.setItem('user', JSON.stringify(data.user));
-    this.userSource.next(data.user as User);
+    localStorage.setItem('token', data.access);
+    localStorage.setItem('refresh', data.refresh);
+    let user = this.jwtService.decodeToken(data.access).user;
+    localStorage.setItem('user', JSON.stringify(user));
+    this.userSource.next(user as User);
     return data;
   }
 }

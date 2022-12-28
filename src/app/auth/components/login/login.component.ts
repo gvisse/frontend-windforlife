@@ -43,7 +43,7 @@ export class LoginComponent implements OnInit {
       .pipe(finalize(() => this.loading = false))
       .subscribe({
         next: (data) => {
-          if (data.token) {
+          if (data.access) {
             this.router.navigate(['/anemometer/']);
           }
         },

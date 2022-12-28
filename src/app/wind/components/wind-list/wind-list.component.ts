@@ -1,9 +1,8 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
 
-import { Observable, map, tap } from 'rxjs';
-import { AuthService } from 'src/app/core/services/auth.service';
+import { Observable } from 'rxjs';
+import { AuthService } from '../../../core/services/auth.service';
 import { Wind } from '../../models/wind.model';
 import { WindsService } from '../../services/winds.service';
 

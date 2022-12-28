@@ -7,9 +7,10 @@ import { JwtHelperService, JWT_OPTIONS } from '@auth0/angular-jwt';
 describe('AuthService', () => {
     let service: AuthService;
     let httpMock: HttpTestingController;
+    let jwtService: JwtHelperService;
 
     let url_login = `${environment.apiUrl}/login/`
-    const mockResponseToken = { token: 'refreshed-mock-token' };
+    const mockResponseToken = { access: 'refreshed-mock-token',  };
 
     function flushRequest(url: string, method: string, response: {}){
         const request = httpMock.expectOne(url);
@@ -26,6 +27,7 @@ describe('AuthService', () => {
         });
 
         service = TestBed.inject(AuthService);
+        jwtService = TestBed.inject(JwtHelperService);
         httpMock = TestBed.inject(HttpTestingController);
     });
 
@@ -39,8 +41,17 @@ describe('AuthService', () => {
 
     it('should logon and return a token', () => {
         const userCredentials = { username: 'testuser', password: 'testpassword' };
-        const mockResponse = { token: 'mock-token', user: { username: 'testuser' } };
+        const mockResponse = { access: 'mock-token', refresh: 'mock-refresh-token' };
 
+        jest.spyOn(jwtService, 'decodeToken').mockReturnValue({ 
+            username: 'testuser',
+            is_superuser: false,
+            is_staff: false,
+            first_name: 'User',
+            last_name: 'Test',
+            email: 'testuser@exemple.com',
+            id: 1
+        });
         service.logon(userCredentials).subscribe(response => {
             expect(response).toEqual(mockResponse);
         });
@@ -67,9 +78,15 @@ describe('AuthService', () => {
         jest.spyOn(service, 'isTokenExpired').mockReturnValue(false);
         expect(service.isAuthenticated()).toBe(true);
     });
+    
+    it('should return false if the token is expired (no Token in local)', () => {
+        jest.spyOn(service, 'isTokenExpired').mockReturnValue(true); 
+        expect(service.isAuthenticated()).toBe(false);
+    });
 
-    it('should return false if the token is expired', () => {
-        jest.spyOn(service, 'isTokenExpired').mockReturnValue(true);
+    it('should return false if the token is expired (with Token in local)', () => {
+        jest.spyOn(service, 'isTokenExpired').mockReturnValue(true); 
+        jest.spyOn(service, 'getToken').mockReturnValue('mock-token');
         expect(service.isAuthenticated()).toBe(false);
     });
 

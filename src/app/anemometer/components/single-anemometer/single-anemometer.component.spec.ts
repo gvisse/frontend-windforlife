@@ -103,7 +103,7 @@ describe('SingleAnemometerComponent', () => {
 
 
   it('should call the createWind method of the WindsService', () => {
-    const createdWind = { speed: 10, time: creationDate, anemometer_id: 1};
+    const createdWind = { speed: 10, direction: 0, time: creationDate, anemometer_id: 1};
     const expectedWind = {id : 1, time: creationDate, speed: 10, cardinal: 'N', direction: 0, anemometer_id: 1}
     component.onCreateWind(createdWind);
     expect(windsService.createWind).toHaveBeenCalledWith(createdWind);

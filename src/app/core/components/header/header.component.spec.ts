@@ -17,6 +17,7 @@ describe('HeaderComponent', () => {
   let headerDe: DebugElement;
   let headerEl: HTMLElement;
   let service: AuthService;
+  let jwtService: JwtHelperService;
   let httpMock: HttpTestingController;
 
   let router: Router;
@@ -42,6 +43,7 @@ describe('HeaderComponent', () => {
 
     service = TestBed.inject(AuthService);
     router = TestBed.inject(Router);
+    jwtService = TestBed.inject(JwtHelperService);
     httpMock = TestBed.inject(HttpTestingController);
     fixture.detectChanges();
   });
@@ -52,7 +54,8 @@ describe('HeaderComponent', () => {
 
   it('should return a string with user\'s firstname and lastname', () => {
     const userCredentials = { username: 'testuser', password: 'testpassword' };
-    const mockResponse = { token: 'mock-token', user: {
+    const mockResponse = { access: 'mock-token', refresh: 'mock-refresh',  user: {
+      id: 1,
       username: 'testuser',
       email: 'testuser@test.com',
       is_superuser: false,
@@ -60,15 +63,14 @@ describe('HeaderComponent', () => {
       first_name: 'User',
       last_name: 'Test'}
     };
-
+    
     service.logon(userCredentials).subscribe(response => {
       expect(response).toEqual(mockResponse);
+      const request = httpMock.expectOne(`${environment.apiUrl}/login/`);
+      expect(request.request.method).toBe('POST');
+      request.flush(mockResponse);
+      expect(component.getUser()).toBe('User Test');
     });
-
-    const request = httpMock.expectOne(`${environment.apiUrl}/login/`);
-    expect(request.request.method).toBe('POST');
-    request.flush(mockResponse);
-    expect(component.getUser()).toBe('User Test');
   });
 
   it('should not return fullname of the user because no user connected', () => {

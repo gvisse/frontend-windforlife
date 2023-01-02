@@ -2,9 +2,9 @@ import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angula
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import maplibreGl, {GeoJSONSource, Map, NavigationControl, Popup } from 'maplibre-gl';
 import { Observable } from 'rxjs';
-import { Anemometer } from 'src/app/anemometer/models/anemometer.model';
-import { AnemometersService } from 'src/app/anemometer/services/anemometers.service';
-import { Tag } from 'src/app/tag/models/tag.model';
+import { Anemometer } from '../../../anemometer/models/anemometer.model';
+import { AnemometersService } from '../../../anemometer/services/anemometers.service';
+import { Tag } from '../../../tag/models/tag.model';
 import { WindStatsService } from '../../services/wind-stats.service';
 
 @Component({

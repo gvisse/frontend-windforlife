@@ -1,11 +1,11 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { map, Observable, startWith, tap } from 'rxjs';
-import { Tag } from 'src/app/tag/models/tag.model';
+import { Tag } from '../../../tag/models/tag.model';
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
 import { MatAutocomplete, MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
 import { MatChipInputEvent } from '@angular/material/chips';
-import { TagsService } from 'src/app/tag/services/tags.service';
+import { TagsService } from '../../../tag/services/tags.service';
 import { AnemometersService } from '../../services/anemometers.service';
 import { Router } from '@angular/router';
 

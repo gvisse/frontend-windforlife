@@ -1,9 +1,8 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
-import { Anemometer } from 'src/app/anemometer/models/anemometer.model';
-import { AnemometersService } from 'src/app/anemometer/services/anemometers.service';
-import { WindsService } from '../../services/winds.service';
+import { Anemometer } from '../../../anemometer/models/anemometer.model';
+import { AnemometersService } from '../../../anemometer/services/anemometers.service';
 import { dateValidator } from '../../validators/dateInFuture.validator';
 
 @Component({
@@ -17,8 +16,6 @@ export class WindAddComponent implements OnInit {
 
   allAnemometers$!: Observable<Anemometer[]>;
   filteredTags$!: Observable<Observable<string[]>>;
-
-  anemometerCtrl = new FormControl();
   
   @Input() anemometer_id?: number;
   @Output() createdWind = new EventEmitter<{speed: number, direction: number, time: Date, anemometer_id: number}>()
@@ -40,7 +37,7 @@ export class WindAddComponent implements OnInit {
         speed: [null, [Validators.required, Validators.min(0)]],
         direction: [null, [Validators.required, Validators.min(0), Validators.max(360)]],
         time: [null, [Validators.required, dateValidator()]],
-        anemometer_id : this.anemometerCtrl
+        anemometer_id : [null, [Validators.required]]
       },{
         updateOn: 'blur'
       }

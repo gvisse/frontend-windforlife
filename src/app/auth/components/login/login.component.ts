@@ -1,9 +1,9 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, NgZone, OnInit, ViewChild } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { finalize } from 'rxjs';
-import { AuthService } from 'src/app/core/services/auth.service';
+import { AuthService } from '../../../core/services/auth.service';
 import { UserCredentials } from '../../models/user-credentials.model';
 
 @Component({
@@ -20,31 +20,28 @@ export class LoginComponent implements OnInit {
   loginForm!: FormGroup;
   loginValid = true;
 
-  private readonly returnUrl: string;
-
   @ViewChild('password') pwd!: ElementRef;
   togglePwd = false;
 
   constructor(private authService : AuthService,
               private fb: FormBuilder,
-              private route: ActivatedRoute,
-              private router: Router)
+              private router: Router,
+              private ngZone: NgZone)
     { 
-      this.returnUrl = this.route.snapshot.queryParams['returnUrl']
     }
 
   ngOnInit(): void {
     this.initForm();
   }
 
-  logInUser(user: UserCredentials): void {
+  private logInUser(user: UserCredentials): void {
     this.loading = true;
     this.authService.logon(user)
       .pipe(finalize(() => this.loading = false))
       .subscribe({
         next: (data) => {
           if (data.access) {
-            this.router.navigate(['/anemometer/']);
+            this.ngZone.run(() => this.router.navigate(['/anemometer/']));
           }
         },
         error: (error) => {
@@ -88,7 +85,7 @@ export class LoginComponent implements OnInit {
       return 'Ce champ est requis';
     }
     else{
-      return 'Ce champs contient une erreur'
+      return 'Ce champ contient une erreur'
     }
   }
 

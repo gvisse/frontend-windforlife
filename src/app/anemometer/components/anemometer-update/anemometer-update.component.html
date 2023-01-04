@@ -30,7 +30,7 @@
                 <mat-form-field appearance="fill">
                     <mat-label>Latitude</mat-label>
                     <input matInput placeholder="Latitude" type="number" formControlName="latitude">
-                    <mat-error>{{ getFormControlErrorText(anemometerForm.controls['altitude']) }}</mat-error>
+                    <mat-error>{{ getFormControlErrorText(anemometerForm.controls['latitude']) }}</mat-error>
                 </mat-form-field>
                 <mat-form-field appearance="fill">
                     <mat-label>Longitude</mat-label>
@@ -63,6 +63,7 @@
                     <input
                     placeholder="Enter Tag"
                     #tagInput
+                    id="tag-chip-input"
                     [formControl]="tagControl"
                     [matChipInputFor]="chipList"
                     [matAutocomplete]="auto"

@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, NgZone, OnInit, ViewChild } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { map, Observable, startWith, tap } from 'rxjs';
 import { Tag } from '../../../tag/models/tag.model';
@@ -27,7 +27,7 @@ export class AnemometerNewComponent implements OnInit {
   // Set this to false to ensure Tags are from allTags list only.
   // Set this to true to also allow 'free text' Tags.
   //
-  private allowFreeTextAddTag = true;
+  allowFreeTextAddTag = true;
 
   tagControl = new FormControl();
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
@@ -39,12 +39,9 @@ export class AnemometerNewComponent implements OnInit {
   constructor(private fb: FormBuilder,
               private tagsService: TagsService,
               private anemometersService: AnemometersService,
-              private router: Router)
+              private router: Router,
+              private ngZone: NgZone)
   {
-  }
-
-  get tags(){
-    return this.anemometerForm.get('tags');
   }
 
   ngOnInit() {
@@ -183,6 +180,6 @@ export class AnemometerNewComponent implements OnInit {
   }
 
   onGoback(){
-    this.router.navigateByUrl('anemometer')
+    this.ngZone.run(() => this.router.navigateByUrl('anemometer'));
   }
 }

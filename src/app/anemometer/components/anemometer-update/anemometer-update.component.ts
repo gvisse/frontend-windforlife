@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, NgZone, OnInit, ViewChild } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { map, Observable, startWith, switchMap, take, tap } from 'rxjs';
 import { Tag } from '../../../tag/models/tag.model';
@@ -30,7 +30,7 @@ export class AnemometerUpdateComponent implements OnInit {
   // Set this to false to ensure Tags are from allTags list only.
   // Set this to true to also allow 'free text' Tags.
   //
-  private allowFreeTextAddTag = true;
+  allowFreeTextAddTag = true;
 
   tagControl = new FormControl();
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
@@ -43,12 +43,9 @@ export class AnemometerUpdateComponent implements OnInit {
               private tagsService: TagsService,
               private anemometersService: AnemometersService,
               private route: ActivatedRoute,
-              private router: Router)
+              private router: Router,
+              private ngZone: NgZone)
   {
-  }
-
-  get tags(){
-    return this.anemometerForm.get('tags');
   }
 
   ngOnInit() {
@@ -65,7 +62,7 @@ export class AnemometerUpdateComponent implements OnInit {
     this.allTags$ = this.tagsService.allTags$;
     this.filteredTags$ = this.tagControl.valueChanges.pipe(
       startWith(null),
-      map((tagName: string | null) => (
+      map((tagName: string | null ) => (
         tagName ? this._filter(tagName) : 
           this.allTags$.pipe(
             map(tags => tags.map(tag => tag.name)),
@@ -79,9 +76,9 @@ export class AnemometerUpdateComponent implements OnInit {
   private initForm(){
     this.anemometerForm = this.fb.group({
       name : ['', [Validators.required, Validators.minLength(5)]],
-      latitude: ['', [Validators.required, Validators.min(-90), Validators.max(90)]],
-      longitude: ['', [Validators.required, Validators.min(-180), Validators.max(180)]],
-      altitude: ['', [Validators.required, Validators.min(-434), Validators.max(8849)]],
+      latitude: ['', [Validators.required]],
+      longitude: ['', [Validators.required]],
+      altitude: ['', [Validators.required]],
       tags: this.tagControl
     });
     this.setForm();
@@ -101,7 +98,10 @@ export class AnemometerUpdateComponent implements OnInit {
   }
 
   private _filter(value: string): Observable<string[]>{
-    const filterValue = value.toLowerCase();
+    let filterValue = ''
+    if(value !== null && value !== '' && typeof value === 'string'){
+      filterValue = value.toLowerCase();
+    }
     return this.allTags$.pipe(
       map(tags => tags.filter(tag => tag.name.toLowerCase().includes(filterValue))),
       map(tags => tags.map(tag => tag.name))
@@ -138,10 +138,6 @@ export class AnemometerUpdateComponent implements OnInit {
   getFormControlErrorText(ctrl: AbstractControl) {
     if (ctrl.hasError('required')) {
       return 'Ce champ est requis';
-    } else if (ctrl.hasError('min')) {
-      return `Merci d'entrer une coordonnée valide (> ${ctrl.errors!['min']['min']})`;
-    } else if (ctrl.hasError('max')) {
-      return `Merci d'entrer une coordonnée valide (< ${ctrl.errors!['max']['max']})`;
     } else if (ctrl.hasError('minlength')) {
       return `Le nom n\'est pas assez long (min: ${ctrl.errors!['minlength']['requiredLength']})`;
     } else {
@@ -165,8 +161,8 @@ export class AnemometerUpdateComponent implements OnInit {
     this.resetInputs();
   }
 
-  removeTag(Tag: Tag): void {
-    const index = this.chipSelectedTags.indexOf(Tag);
+  removeTag(tag: Tag): void {
+    const index = this.chipSelectedTags.indexOf(tag);
     if (index >= 0) {
       this.chipSelectedTags.splice(index, 1);
     }
@@ -210,6 +206,6 @@ export class AnemometerUpdateComponent implements OnInit {
   }
 
   onGoback(){
-    this.router.navigateByUrl('anemometer')
+    this.ngZone.run(() => this.router.navigateByUrl('anemometer'));
   }
 }
